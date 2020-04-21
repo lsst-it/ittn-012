@@ -1,3 +1,82 @@
+:tocdepth: 1
+
+.. Please do not modify tocdepth; will be fixed when a new Sphinx theme is shipped.
+
+.. note::
+
+   **This technote is not yet published.**
+
+   Graylog k8s deployment and configuration
+
+.. sectnum::
+
+Introduction
+============
+
+Hierarchical construction, deployment and configuration of a Graylog chart over GKE
+
+Requirements
+============
+
+Google Cloud Platform account
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+In order to correctly deploy the chart over GKE (Google Kubernetes Engine), it is
+needed for you to have a payed account, and sufficient priviledges to create a 
+cluster and nodes among it.
+
+
+Creating the Cluster
+====================
+
+
+GCloud and kubectl extension
+============================
+
+
+Helm charts and values.yaml
+===========================
+
+
+Ingress Controller
+===================
+
+
+Deploying the charts
+====================
+
+
+Configuring Graylog
+===================
+.. Main Title
+
+Adding the Inputs
+^^^^^^^^^^^^^^^^^
+.. Second Title
+
+1. Keeping to know the structure order
+
+   .. note::
+
+      Keeping to know the structure order
+
+2. Keeping to know the structure order
+3. Keeping to know the structure order
+
+
+Extractors
+^^^^^^^^^^
+
+Network
+-------
+.. Third Tittle
+
+Servers
+-------
+
+Firewall
+-------
+
 ..
   Technote content.
 
@@ -59,3 +138,4 @@
 
 .. .. bibliography:: local.bib lsstbib/books.bib lsstbib/lsst.bib lsstbib/lsst-dm.bib lsstbib/refs.bib lsstbib/refs_ads.bib
 ..    :style: lsst_aa
+
