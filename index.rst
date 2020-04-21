@@ -67,15 +67,45 @@ Adding the Inputs
 Extractors
 ^^^^^^^^^^
 
+Firewall
+--------
+
+a. Source Name (Type Substring)
+   Description: Trying to extract data from source into source, leaving the original intact.
+
+
+b. Extract Involve IPs (Type Split & Index)
+   Description: Trying to extract data from message into src_and_dst_IP, leaving the original intact.
+
+c. Source IP (Type Split & Index)
+   Description: Trying to extract data from src_and_dst_IP into src_IP, leaving the original intact.
+
+d. Destination IP 
+
+e. Replace Destination IP
+
+f.
+
+g.
+
+h.
+
+i.
+
 Network
 -------
-.. Third Tittle
+
+a. S
 
 Servers
 -------
 
+<<<<<<< HEAD
 Firewall
 --------
+=======
+
+>>>>>>> e9445c0... updates
 
 ..
   Technote content.
