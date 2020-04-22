@@ -69,131 +69,133 @@ Extractors
 Firewall
 --------
 
-a. 
-   - Name: Source Name 
-   - Description: 
-   - Type: Substring 
-   - Source Field: source 
-   - New Field: source 
+I. 
+   - Name:                  Source Name 
+   - Description:  
+   - Type:                  Substring 
+   - Source Field:          source 
+   - New Field:             source 
    - Configuration:
-      - end_index: “5”
-      - begin_index: “0”
+      i-.  end_index:       "5"
+      ii-. begin_index:     "0"
 
-b. 
-   - Name: Extract Involve IPs 
+II. 
+   - Name:                  Extract Involve IPs 
    - Description: 
-   - Type: Split & Index 
-   - Source Field: message 
-   - New Field: src_and_dst_IP 
+   - Type:                  Split & Index 
+   - Source Field:          message 
+   - New Field:             src_and_dst_IP 
    - Configuration:
-      - index: “2”
-      - split_by: “{TCP}”
+      i-.  index:           "2"
+      ii-. split_by:        "{TCP}"
 
-c. 
-   - Name: Source IP with Port 
+III. 
+   - Name:                  Source IP with Port 
    - Description: 
-   - Type: Split & Index 
-   - Source Field: src_and_dst_IP 
-   - New Field: src_IP 
+   - Type:                  Split & Index 
+   - Source Field:          src_and_dst_IP 
+   - New Field:             src_IP 
    - Configuration:
-      - index: “1”
-      - split_by: “->”
+      i-.  index:           "1"
+      ii-. split_by:        "->"
 
-d. 
-   - Name: Destination IP 
+IV. 
+   - Name:                  Destination IP 
    - Description: 
-   - Type: Split & Index 
-   - Source Field: src_and_dst_IP 
-   - New Field: dst_IP 
+   - Type:                  Split & Index 
+   - Source Field:          src_and_dst_IP 
+   - New Field:             dst_IP 
    - Configuration:
-      - index: “2”
-      - split_by: “->”
+      i-.  index:           "2"
+      ii-. split_by:        "->"
 
-e. 
-   - Name: Replace Destination IP 
+V. 
+   - Name:                  Replace Destination IP 
    - Description: 
-   - Type: Split & Index 
-   - Source Field: dst_IP 
-   - New Field: dst_IP 
+   - Type:                  Split & Index 
+   - Source Field:          dst_IP 
+   - New Field:             dst_IP 
    - Configuration:
-      - index: “1”
-      - split_by: “:”
+      i-. index:             "1"
+      ii-. split_by:         ":"
 
-f. 
-   - Name: Remove Port from Source IP 
+VI. 
+   - Name:                   Remove Port from Source IP 
    - Description: 
-   - Type: Split & Index 
-   - Source Field: src_IP 
-   - New Field: src_IP 
+   - Type:                   Split & Index 
+   - Source Field:           src_IP 
+   - New Field:              src_IP 
    - Configuration:
-      - index: “1”
-      - split_by: “:”
+      i-.  index:            "1"
+      ii-. split_by:         ":"
 
-g. 
-   - Name: Source Geolocation 
+VII. 
+   - Name:                   Source Geolocation 
    - Description: 
-   - Type: LookUP Table 
-   - Source Field: src_IP 
-   - New Field: src_geolocation 
+   - Type:                   LookUP Table 
+   - Source Field:           src_IP 
+   - New Field:              src_geolocation 
    - Configuration:
-      - lookup_table_name: “GeoLocation”
+      i-. lookup_table_name: "GeoLocation"
 
-h. 
-   - Name: VPN Username and IP 
+VIII. 
+   - Name:                   VPN Username and IP 
    - Description: 
-   - Type: Split & Index 
-   - Source Field: message 
-   - New Field: userIP_and_Name 
+   - Type:                   Split & Index 
+   - Source Field:           message 
+   - New Field:              userIP_and_Name 
    - Configuration:
-      - index: “2”
-      - split_by: “:”
+      i-.  index:            "2"
+      ii-. split_by:         ":"
 
-i. 
-   - Name: User and Remote IP 
+IX. 
+   - Name:                   User and Remote IP 
    - Description: 
-   - Type: Split & Index 
-   - Source Field: message 
-   - New Field: username Configuration:
-      - index: “1”
-      - split_by: “:”
+   - Type:                   Split & Index 
+   - Source Field:           message 
+   - New Field:              username 
+   - Configuration:
+      i-.  index:            "1"
+      ii-. split_by:         ":"
 
-j. 
-   - Name: VPN Username 
+X. 
+   - Name:                   VPN Username 
    - Description: 
-   - Type: Split & Index 
-   - Source Field: username 
-   - New Field: username Configuration:
-      - index: “1”
-      - split_by: “/”
+   - Type:                   Split & Index 
+   - Source Field:           username 
+   - New Field: username 
+   - Configuration:
+      i-.  index:            "1"
+      ii-. split_by:         "/"
 
-k. 
-   - Name: VPN User IP 
+XI. 
+   - Name:                   VPN User IP 
    - Description:
-   - Type: Split & Index
-   - Source Field: username 
-   - New Field: vpnIP 
+   - Type:                   Split & Index
+   - Source Field:           username 
+   - New Field:              vpnIP 
    - Configuration:
-      - index: “2”
-      - split_by: “/”
+      i-.  index:            "2"
+      ii-. split_by:         "/"
 
-l. 
-   - Name: Replace VPN User IP 
+XII. 
+   - Name:                   Replace VPN User IP 
    - Description: 
-   - Type: Split & Index 
-   - Source Field: userIP_and_Name 
-   - New Field: vpnIP 
+   - Type:                   Split & Index 
+   - Source Field:           userIP_and_Name 
+   - New Field:              vpnIP 
    - Configuration:
-      - index: “2”
-      - split_by: “/”
+      i-.  index:            "2"
+      ii-. split_by:         "/"
 
-m. 
-   - Name: VPN User Location 
+XIII. 
+   - Name:                   VPN User Location 
    - Description: 
-   - Type: LookUP Table 
-   - Source Field: vpnIP 
-   - New Field: vpn_location 
+   - Type:                   LookUP Table 
+   - Source Field:           vpnIP 
+   - New Field:              vpn_location 
    - Configuration:
-      - lookup_table_name: “GeoLocation”
+      i-. lookup_table_name: "GeoLocation"
 
 
 
