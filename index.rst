@@ -69,7 +69,7 @@ Extractors
 Firewall
 --------
 
-.. _table-FwExtractos:
+.. _table-FwExtractors:
 
 .. table:: Firewall Extractors.
 
