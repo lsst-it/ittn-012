@@ -76,8 +76,7 @@ Firewall
     | Number |       Name         |          Description         |      Type     | Source Field |  New Field  |        Configuration       |
     +========+====================+==============================+===============+==============+=============+============================+
     |   1    |    Source Name     | Replace source with a resize |    Substring  |    source    |   source    |  end_index  | begin_index  |
-    |        |                    | source field                 |               |              |             |----------------------------|
-    |        |                    |                              |               |              |             |      5      |      0       |
+    |        |                    | source field                 |               |              |             |      5      |      0       |
     +--------+--------------------+------------------------------+---------------+--------------+-------------+----------------------------+
 
 .. _table-label:
