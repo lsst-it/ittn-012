@@ -69,6 +69,23 @@ Extractors
 Firewall
 --------
 
+.. _table-firewall-extractors:
+
+.. table:: Firewall Extractors.
+      +--------+--------------------+------------------------------+---------------+--------------+-------------+----------------------------+
+      | Number |       Name         |          Description         |      Type     | Source Field |  New Field  |        Configuration       |
+      +========+====================+==============================+===============+==============+=============+============================+
+      |   1    |    Source Name     | Replace source with a resize |    Substring  |    source    |   source    |                            |
+      |        |                    | source field                 |               |              |             |----------------------------|
+      |        |                    | source field                 |               |              |             |                            |
+      +--------+--------------------+------------------------------+---------------+--------------+-------------+----------------------------+
+      |
+      |
+      |
+      |
+      |
+      |
+      |
 I. 
    - Name:                  Source Name 
    - Description:  
@@ -185,7 +202,7 @@ XII.
    - Source Field:           userIP_and_Name 
    - New Field:              vpnIP 
    - Configuration:
-      i-.  index:            "2"
+    -.  index:            "2"
       ii-. split_by:         "/"
 
 XIII. 
@@ -195,7 +212,7 @@ XIII.
    - Source Field:           vpnIP 
    - New Field:              vpn_location 
    - Configuration:
-      i-. lookup_table_name: "GeoLocation"
+     - lookup_table_name: "GeoLocation"
 
 
 
