@@ -219,8 +219,6 @@ a. S
 Servers
 -------
 
-
-
 ..
   Technote content.
 
