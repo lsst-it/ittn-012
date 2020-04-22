@@ -74,35 +74,35 @@ Firewall
 .. table:: Firewall Extractors.
 
     +--------+---------------------+------------------------+-----------+--------------+--------------+-------------------------+
-    | Number |          Name       |       Description      |   Type    |  SourceField |   DstField   |      Configurations     |
+    | Number |        Name         |       Description      |   Type    |  SourceField |   DstField   |      Configurations     |
     |        |                     |                        |           |              |              |                         |
     +========+=====================+========================+===========+==============+==============+=========================+
     |   1    |      Source Name    | Replace source name    | Substring |   source     |    source    |        index [0,5]      |
     |        |                     | with a shrink version  |           |              |              |                         |
     +--------+---------------------+------------------------+-----------+--------------+--------------+-------------------------+
-    |   2    | Extract Involve     | Replace source name    | Substring |   source     |    source    |        index [0,5]      |
+    |   2    |   Extract Involve   | Replace source name    | Substring |   source     |    source    |        index [0,5]      |
     |        |       IPs           | with a shrink version  |           |              |              |                         |
     +--------+---------------------+------------------------+-----------+--------------+--------------+-------------------------+
-    |   3    | Source IP with      | Replace source name    | Substring |   source     |    source    |        index [0,5]      |
+    |   3    |    Source IP with   | Replace source name    | Substring |   source     |    source    |        index [0,5]      |
     |        |       Port          | with a shrink version  |           |              |              |                         |
     +--------+---------------------+------------------------+-----------+--------------+--------------+-------------------------+
-    |   4    | Destination IP      | Replace source name    | Substring |   source     |    source    |        index [0,5]      |
+    |   4    |    Destination IP   | Replace source name    | Substring |   source     |    source    |        index [0,5]      |
     |        |                     | with a shrink version  |           |              |              |                         |
     +--------+---------------------+------------------------+-----------+--------------+--------------+-------------------------+
-    |   5    | Replace Destination | Replace source name    | Substring |   source     |    source    |        index [0,5]      |
-    |        |         IP          | with a shrink version  |           |              |              |                         |
+    |   5    |       Replace       | Replace source name    | Substring |   source     |    source    |        index [0,5]      |
+    |        |   Destination IP    | with a shrink version  |           |              |              |                         |
     +--------+---------------------+------------------------+-----------+--------------+--------------+-------------------------+
-    |   6    | Remove Port Source  | Replace source name    | Substring |   source     |    source    |        index [0,5]      |
-    |        |         IP          | with a shrink version  |           |              |              |                         |
+    |   6    |      Remove Port    | Replace source name    | Substring |   source     |    source    |        index [0,5]      |
+    |        |       Source IP     | with a shrink version  |           |              |              |                         |
     +--------+---------------------+------------------------+-----------+--------------+--------------+-------------------------+
-    |   7    | Source Geolocation  | Replace source name    | Substring |   source     |    source    |        index [0,5]      |
-    |        |                     | with a shrink version  |           |              |              |                         |
+    |   7    |       Source        | Replace source name    | Substring |   source     |    source    |        index [0,5]      |
+    |        |     Geolocation     | with a shrink version  |           |              |              |                         |
     +--------+---------------------+------------------------+-----------+--------------+--------------+-------------------------+
-    |   8    | VPN Username and IP | Replace source name    | Substring |   source     |    source    |        index [0,5]      |
-    |        |                     | with a shrink version  |           |              |              |                         |
+    |   8    |    VPN Username     | Replace source name    | Substring |   source     |    source    |        index [0,5]      |
+    |        |       and IP        | with a shrink version  |           |              |              |                         |
     +--------+---------------------+------------------------+-----------+--------------+--------------+-------------------------+
-    |   9    | User and Remote IP  | Replace source name    | Substring |   source     |    source    |        index [0,5]      |
-    |        |                     | with a shrink version  |           |              |              |                         |
+    |   9    |      User and       | Replace source name    | Substring |   source     |    source    |        index [0,5]      |
+    |        |      Remote IP      | with a shrink version  |           |              |              |                         |
     +--------+---------------------+------------------------+-----------+--------------+--------------+-------------------------+
     |   10   |    VPN Username     | Replace source name    | Substring |   source     |    source    |        index [0,5]      |
     |        |                     | with a shrink version  |           |              |              |                         |
