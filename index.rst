@@ -18,7 +18,7 @@ Requirements
 ============
 
 Google Cloud Platform account
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+-----------------------------
 
 In order to correctly deploy the chart over GKE (Google Kubernetes Engine), it is
 needed for you to have a payed account, and sufficient priviledges to create a 
@@ -50,7 +50,7 @@ Configuring Graylog
 .. Main Title
 
 Adding the Inputs
-^^^^^^^^^^^^^^^^^
+-----------------
 .. Second Title
 
 1. Keeping to know the structure order
@@ -64,25 +64,22 @@ Adding the Inputs
 
 
 Extractors
-^^^^^^^^^^
+----------
 
 Firewall
---------
+^^^^^^^^
 
 .. _table-FwExtractors:
 
 .. table:: Firewall Extractors.
 
-    +------------------------+------------+------------------------+----------+--------------+--------------+--------------------+
-    |       Number           |     Name   |       Description      |   Type   |  Src Field   |   Dst Field  |   Configurations   |
-    |                        |            |                        |          |              |              |                    |
-    +========================+============+========================+==========+==============+==============+====================+
-    | body row 1, column 1   | column 2   | column 3               | column 4 |              |              |                    |
-    |                        | with many  | spans                  |          |              |              |                    |
-    |                        | rows       | both                   |          |              |              |                    |
-    +------------------------+------------+------------------------+----------+--------------+--------------+--------------------+
-    | body row 2             | ...        |                        | ...      |              |              |                    |
-    +------------------------+------------+------------------------+----------+--------------+--------------+--------------------+
+    +------------------------+-------------+------------------------+-----------+--------------+--------------+-------------------------+
+    |        Number          |    Name     |       Description      |   Type    |  SourceField |   DstField   |      Configurations     |
+    +========================+=============+========================+===========+==============+==============+=========================+
+    |           1            | Source Name | Replace source name    | Substring |   source     |    source    | end_index | begin_index |
+    |                        |             | with a shrink version  |           |              |              |-----------|-------------|
+    |                        |             |                        |           |              |              |     5     |     0       |
+    +------------------------+-------------+------------------------+-----------+--------------+--------------+-------------------------+
 
 
 
@@ -217,12 +214,12 @@ XIII.
 
 
 Network
--------
+^^^^^^^
 
 a. S
 
 Servers
--------
+^^^^^^^
 
 ..
   Technote content.
