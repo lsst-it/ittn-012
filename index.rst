@@ -89,16 +89,16 @@ Firewall
     |   4    |    Destination IP   | Replace source name    | Substring |   source     |    source    |        index [0,5]      |
     |        |                     | with a shrink version  |           |              |              |                         |
     +--------+---------------------+------------------------+-----------+--------------+--------------+-------------------------+
-    |   5    |       Replace       | Replace source name    | Substring |   source     |    source    |        index [0,5]      |
+    |   5    |Replace              | Replace source name    | Substring |   source     |    source    |        index [0,5]      |
     |        |   Destination IP    | with a shrink version  |           |              |              |                         |
     +--------+---------------------+------------------------+-----------+--------------+--------------+-------------------------+
     |   6    |      Remove Port    | Replace source name    | Substring |   source     |    source    |        index [0,5]      |
     |        |       Source IP     | with a shrink version  |           |              |              |                         |
     +--------+---------------------+------------------------+-----------+--------------+--------------+-------------------------+
-    |   7    |       Source        | Replace source name    | Substring |   source     |    source    |        index [0,5]      |
+    |   7    |Source               | Replace source name    | Substring |   source     |    source    |        index [0,5]      |
     |        |     Geolocation     | with a shrink version  |           |              |              |                         |
     +--------+---------------------+------------------------+-----------+--------------+--------------+-------------------------+
-    |   8    |    VPN Username     | Replace source name    | Substring |   source     |    source    |        index [0,5]      |
+    |   8    |VPN Username         | Replace source name    | Substring |   source     |    source    |        index [0,5]      |
     |        |       and IP        | with a shrink version  |           |              |              |                         |
     +--------+---------------------+------------------------+-----------+--------------+--------------+-------------------------+
     |   9    |      User and       | Replace source name    | Substring |   source     |    source    |        index [0,5]      |
