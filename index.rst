@@ -63,19 +63,161 @@ Adding the Inputs
 2. Keeping to know the structure order
 3. Keeping to know the structure order
 
+LookUP Tables
+^^^^^^^^^^^^^
+
+Dashboard
+^^^^^^^^^
+
+Centralized Logging System
+--------------------------
+
+a.Top Access to Servers
+b.Recent Root Access
+c.Failed Sudo Access
+d.Top Access to NetDevices
+e.Flapping Interfaces
+f.Successfull Loggins
+g.Failed Logins
+h.DNS hits LS/Dev
+i.Top Servers Talkers
+j.NetDev Interface Change State
+k.Top NetDev Talkers
+l.Authorized VPN Users Location
+m.Potencial Attacks through IP GeoLocation
+n.VPN Location - Username - IP
+
 
 Extractors
 ^^^^^^^^^^
 
+Firewall
+--------
+
+a. Name:         Source Name 
+   Description: 
+   Type:         Substring
+   Source Field: source
+   New Field:    source
+   Configuration:
+      - end_index:   "5"
+      - begin_index: "0"
+
+b. Name:         Extract Involve IPs
+   Description: 
+   Type:         Split & Index
+   Source Field: message
+   New Field:    src_and_dst_IP
+   Configuration:
+      - index:    "2"
+      - split_by: "{TCP}"
+      
+c. Name:         Source IP with Port
+   Description: 
+   Type:         Split & Index
+   Source Field: src_and_dst_IP
+   New Field:    src_IP
+   Configuration:
+      - index:    "1"
+      - split_by: "->"
+   
+d. Name:         Destination IP 
+   Description: 
+   Type:         Split & Index
+   Source Field: src_and_dst_IP
+   New Field:    dst_IP
+   Configuration:
+      - index:    "2"
+      - split_by: "->"
+   
+e. Name:         Replace Destination IP
+   Description: 
+   Type:         Split & Index
+   Source Field: dst_IP
+   New Field:    dst_IP
+   Configuration:
+      - index:    "1"
+      - split_by: ":"
+
+f. Name:         Remove Port from Source IP
+   Description: 
+   Type:         Split & Index
+   Source Field: src_IP
+   New Field:    src_IP
+   Configuration:
+      - index:    "1"
+      - split_by: ":"
+
+g. Name:         Source Geolocation
+   Description: 
+   Type:         LookUP Table
+   Source Field: src_IP
+   New Field:    src_geolocation
+   Configuration:
+      - lookup_table_name: "GeoLocation"
+
+h. Name:         VPN Username and IP
+   Description: 
+   Type:         Split & Index
+   Source Field: message
+   New Field:    userIP_and_Name
+   Configuration:
+      - index:    "2"
+      - split_by: ":"
+
+i. Name:         User and Remote IP
+   Description: 
+   Type:         Split & Index
+   Source Field: message
+   New Field:    username
+   Configuration:
+      - index:    "1"
+      - split_by: ":"
+
+j. Name:         VPN Username
+   Description: 
+   Type:         Split & Index
+   Source Field: username
+   New Field:    username
+   Configuration:
+      - index:    "1"
+      - split_by: "/"
+   
+k. Name:         VPN User IP
+   Description: 
+   Type:         Split & Index
+   Source Field: username
+   New Field:    vpnIP
+   Configuration:
+      - index:    "2"
+      - split_by: "/"
+
+l. Name:         Replace VPN User IP
+   Description: 
+   Type:         Split & Index
+   Source Field: userIP_and_Name
+   New Field:    vpnIP
+   Configuration:
+      - index:    "2"
+      - split_by: "/"
+
+m. Name:         VPN User Location
+   Description: 
+   Type:         LookUP Table
+   Source Field: vpnIP
+   New Field:    vpn_location
+   Configuration:
+      - lookup_table_name: "GeoLocation"
+   
+
+
 Network
 -------
-.. Third Tittle
+
+a. S
 
 Servers
 -------
-
-Firewall
---------
 
 ..
   Technote content.
