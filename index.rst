@@ -112,6 +112,26 @@ a. S
 Servers
 ^^^^^^^
 
+Common Issues and Solutions
+===========================
+
+Fail index
+----------
+
+Due to many reasons, one of them you ran out of space in the data pod, index might crush, preventing graylog to right more indices into it. The most common way of noticing it, is because
+graylog will find nothing through the search query. To solve it, you can dump the fail indexes through a curl:
+
+.. note::
+
+   Log into a pod that can reach the local k8s network:
+   kubectl exec -it -n graylog graylog-elasticsearch-data-0 -- /bin/bash
+
+   Run the following command:
+   curl -XPUT -H "Content-Type: application/json"  http://localhost:9200/_all/_settings -d '{"index.blocks.read_only_allow_delete": null}'
+
+   If everything goes well, you should get the following output from the above command:                                                                                                                                 
+   {"acknowledged":true}
+
 ..
   Technote content.
 
