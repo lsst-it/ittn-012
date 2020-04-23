@@ -51,17 +51,51 @@ Configuring Graylog
 
 Adding the Inputs
 -----------------
-.. Second Title
 
-1. Keeping to know the structure order
+1. LSST Firewall Syslogs
+   - allow_override_data: true
+   - bind_address: 0.0.0.0
+   - expand_structured_data: true
+   - force_rdns: false
+   - number_worker_threads: 2
+   - override_source: <empty>
+   - port: 7514
+   - recv_buffer_size: 262144
+   - store_full_message: true
 
-   .. note::
+   Add it, and then "More actions -> Add Static Field":
+   - Field Name  collector
+   - Field Value: firewall
 
-      Keeping to know the structure order
+2. LSST Network Syslogs
+   - allow_override_data: true
+   - bind_address: 0.0.0.0
+   - expand_structured_data: true
+   - force_rdns: false
+   - number_worker_threads: 1
+   - override_source: <empty>
+   - port: 6514
+   - recv_buffer_size: 262144
+   - store_full_message: true
+   
+   Add it, and then "More actions -> Add Static Field":
+   - Field Name  collector
+   - Field Value: network
 
-2. Keeping to know the structure order
-3. Keeping to know the structure order
-
+3. LSST Servers Syslogs
+   - allow_override_data: true
+   - bind_address: 0.0.0.0
+   - expand_structured_data: true
+   - force_rdns: false
+   - number_worker_threads: 1
+   - override_source: <empty>
+   - port: 5514
+   - recv_buffer_size: 262144
+   - store_full_message: true
+   
+   Add it, and then "More actions -> Add Static Field":
+   - Field Name  collector
+   - Field Value: servers   
 
 Extractors
 ----------
