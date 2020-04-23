@@ -53,49 +53,49 @@ Adding the Inputs
 -----------------
 
 1. LSST Firewall Syslogs
-   - allow_override_data: true
-   - bind_address: 0.0.0.0
-   - expand_structured_data: true
-   - force_rdns: false
-   - number_worker_threads: 2
-   - override_source: <empty>
-   - port: 7514
-   - recv_buffer_size: 262144
-   - store_full_message: true
+      - allow_override_data: true
+      - bind_address: 0.0.0.0
+      - expand_structured_data: true
+      - force_rdns: false
+      - number_worker_threads: 2
+      - override_source: <empty>
+      - port: 7514
+      - recv_buffer_size: 262144
+      - store_full_message: true
 
-   Add it, and then "More actions -> Add Static Field":
-   - Field Name  collector
-   - Field Value: firewall
+      Add it, and then "More actions -> Add Static Field":
+      - Field Name  collector
+      - Field Value: firewall
 
 2. LSST Network Syslogs
-   - allow_override_data: true
-   - bind_address: 0.0.0.0
-   - expand_structured_data: true
-   - force_rdns: false
-   - number_worker_threads: 1
-   - override_source: <empty>
-   - port: 6514
-   - recv_buffer_size: 262144
-   - store_full_message: true
-   
-   Add it, and then "More actions -> Add Static Field":
-   - Field Name  collector
-   - Field Value: network
+      - allow_override_data: true
+      - bind_address: 0.0.0.0
+      - expand_structured_data: true
+      - force_rdns: false
+      - number_worker_threads: 1
+      - override_source: <empty>
+      - port: 6514
+      - recv_buffer_size: 262144
+      - store_full_message: true
+      
+      Add it, and then "More actions -> Add Static Field":
+      - Field Name  collector
+      - Field Value: network
 
 3. LSST Servers Syslogs
-   - allow_override_data: true
-   - bind_address: 0.0.0.0
-   - expand_structured_data: true
-   - force_rdns: false
-   - number_worker_threads: 1
-   - override_source: <empty>
-   - port: 5514
-   - recv_buffer_size: 262144
-   - store_full_message: true
-   
-   Add it, and then "More actions -> Add Static Field":
-   - Field Name  collector
-   - Field Value: servers   
+      - allow_override_data: true
+      - bind_address: 0.0.0.0
+      - expand_structured_data: true
+      - force_rdns: false
+      - number_worker_threads: 1
+      - override_source: <empty>
+      - port: 5514
+      - recv_buffer_size: 262144
+      - store_full_message: true
+      
+      Add it, and then "More actions -> Add Static Field":
+      - Field Name  collector
+      - Field Value: servers   
 
 Extractors
 ----------
