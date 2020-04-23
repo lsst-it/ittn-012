@@ -73,49 +73,35 @@ Firewall
 
 .. table:: Firewall Extractors.
 
-    +--------+-------------------------+------------------------+-----------+--------------+--------------+-------------------------+
-    | Number |        Name             |       Description      |   Type    |  SourceField |   DstField   |      Configurations     |
-    |        |                         |                        |           |              |              |                         |
-    +========+=========================+========================+===========+==============+==============+=========================+
-    |   1    |  Source Name            | Replace source name    | Substring |   source     |    source    |        index [0,5]      |
-    |        |                         | with a shrink version  |           |              |              |                         |
-    +--------+-------------------------+------------------------+-----------+--------------+--------------+-------------------------+
-    |   2    |  Extract Involve IPs    | Replace source name    | Substring |   source     |    source    |        index [0,5]      |
-    |        |                         | with a shrink version  |           |              |              |                         |
-    +--------+-------------------------+------------------------+-----------+--------------+--------------+-------------------------+
-    |   3    |  Source IP with Port    | Replace source name    | Substring |   source     |    source    |        index [0,5]      |
-    |        |                         | with a shrink version  |           |              |              |                         |
-    +--------+-------------------------+------------------------+-----------+--------------+--------------+-------------------------+
-    |   4    |  Destination IP         | Replace source name    | Substring |   source     |    source    |        index [0,5]      |
-    |        |                         | with a shrink version  |           |              |              |                         |
-    +--------+-------------------------+------------------------+-----------+--------------+--------------+-------------------------+
-    |   5    |  Replace Destination IP | Replace source name    | Substring |   source     |    source    |        index [0,5]      |
-    |        |                         | with a shrink version  |           |              |              |                         |
-    +--------+-------------------------+------------------------+-----------+--------------+--------------+-------------------------+
-    |   6    |  Remove Port Source IP  | Replace source name    | Substring |   source     |    source    |        index [0,5]      |
-    |        |                         | with a shrink version  |           |              |              |                         |
-    +--------+-------------------------+------------------------+-----------+--------------+--------------+-------------------------+
-    |   7    |  Source Geolocation     | Replace source name    | Substring |   source     |    source    |        index [0,5]      |
-    |        |                         | with a shrink version  |           |              |              |                         |
-    +--------+-------------------------+------------------------+-----------+--------------+--------------+-------------------------+
-    |   8    |  VPN Username and IP    | Replace source name    | Substring |   source     |    source    |        index [0,5]      |
-    |        |                         | with a shrink version  |           |              |              |                         |
-    +--------+-------------------------+------------------------+-----------+--------------+--------------+-------------------------+
-    |   9    |  User and Remote IP     | Replace source name    | Substring |   source     |    source    |        index [0,5]      |
-    |        |                         | with a shrink version  |           |              |              |                         |
-    +--------+-------------------------+------------------------+-----------+--------------+--------------+-------------------------+
-    |   10   |  VPN Username           | Replace source name    | Substring |   source     |    source    |        index [0,5]      |
-    |        |                         | with a shrink version  |           |              |              |                         |
-    +--------+-------------------------+------------------------+-----------+--------------+--------------+-------------------------+
-    |   11   |  VPN User IP            | Replace source name    | Substring |   source     |    source    |        index [0,5]      |
-    |        |                         | with a shrink version  |           |              |              |                         |
-    +--------+-------------------------+------------------------+-----------+--------------+--------------+-------------------------+
-    |   12   |  Replace VPN User IP    | Replace source name    | Substring |   source     |    source    |        index [0,5]      |
-    |        |                         | with a shrink version  |           |              |              |                         |
-    +--------+-------------------------+------------------------+-----------+--------------+--------------+-------------------------+
-    |   13   |  VPN User Location      | Replace source name    | Substring |   source     |    source    |        index [0,5]      |
-    |        |                         | with a shrink version  |           |              |              |                         |
-    +--------+-------------------------+------------------------+-----------+--------------+--------------+-------------------------+
+    +--------+-------------------------+-----------------------------------------------+--------------+------------------+-----------------+-------------------------+
+    | Number |        Name             |                 Description                   |    Type      |    SourceField   |  DstField       |      Configurations     |
+    +========+=========================+===============================================+==============+==================+=================+=========================+
+    |   1    |  Source Name            | Replace source name with a shrink version     | Substring    |   source         | source          |        index [0,5]      |
+    +--------+-------------------------+-----------------------------------------------+--------------+------------------+-----------------+-------------------------+
+    |   2    |  Extract Involve IPs    | Grabs the source and destination IP           | Split&Index  |   message        | src_and_dst_IP  |        index [0,5]      |
+    +--------+-------------------------+-----------------------------------------------+--------------+------------------+-----------------+-------------------------+
+    |   3    |  Source IP with Port    | Takes out the source IP only with the port    | Split&Index  |   src_and_dst_IP | src_IP          |        index [0,5]      |
+    +--------+-------------------------+-----------------------------------------------+--------------+------------------+-----------------+-------------------------+
+    |   4    |  Destination IP         | Grabs the destination IP                      | Split&Index  |   src_and_dst_IP | dst_IP          |        index [0,5]      |
+    +--------+-------------------------+-----------------------------------------------+--------------+------------------+-----------------+-------------------------+
+    |   5    |  Replace Destination IP | Replace a clean destination IP                | Split&Index  |   dst_IP         | dst_IP          |        index [0,5]      |
+    +--------+-------------------------+-----------------------------------------------+--------------+------------------+-----------------+-------------------------+
+    |   6    |  Remove Port Source IP  | Takes out the port from the source IP         | Split&Index  |   src_IP         | src_IP          |        index [0,5]      |
+    +--------+-------------------------+-----------------------------------------------+--------------+------------------+-----------------+-------------------------+
+    |   7    |  Source Geolocation     | Places the source IP through the LookUp table | LookUP Table |   src_IP         | src_geolocation |        index [0,5]      |
+    +--------+-------------------------+-----------------------------------------------+--------------+------------------+-----------------+-------------------------+
+    |   8    |  VPN Username and IP    | Takes the username and IP                     | Split&Index  |   message        | userIP_and_Name |        index [0,5]      |
+    +--------+-------------------------+-----------------------------------------------+--------------+------------------+-----------------+-------------------------+
+    |   9    |  User and Remote IP     | Takes the user and IP into username field     | Split&Index  |   message        | username        |        index [0,5]      |
+    +--------+-------------------------+-----------------------------------------------+--------------+------------------+-----------------+-------------------------+
+    |   10   |  VPN Username           | Replace the VPN username                      | Split&Index  |   username       | username        |        index [0,5]      |
+    +--------+-------------------------+-----------------------------------------------+--------------+------------------+-----------------+-------------------------+
+    |   11   |  VPN User IP            | Takes the remote VPN IP                       | Split&Index  |   username       | vpnIP           |        index [0,5]      |
+    +--------+-------------------------+-----------------------------------------------+--------------+------------------+-----------------+-------------------------+
+    |   12   |  Replace VPN User IP    | Replaces tje VPN IP clean                     | Split&Index  |  userIP_and_Name | vpnIP           |        index [0,5]      |
+    +--------+-------------------------+-----------------------------------------------+--------------+------------------+-----------------+-------------------------+
+    |   13   |  VPN User Location      | Runs the IP through the LookUp table          | LookUP Table |   vpnIP          | vpn_location    |        index [0,5]      |
+    +--------+-------------------------+-----------------------------------------------+--------------+------------------+-----------------+-------------------------+
     
 
 II. 
@@ -131,7 +117,7 @@ II.
 III. 
    - Name:                  Source IP with Port 
    - Description: 
-   - Type:                  Split & Index 
+   - Type:                  Split&Index 
    - Source Field:          src_and_dst_IP 
    - New Field:             src_IP 
    - Configuration:
