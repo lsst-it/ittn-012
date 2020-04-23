@@ -73,156 +73,36 @@ Firewall
 
 .. table:: Firewall Extractors.
 
-    +--------+-------------------------+-----------------------------------------------+--------------+------------------+-----------------+-------------------------+
-    | Number |        Name             |                 Description                   |    Type      |    SourceField   |  DstField       |      Configurations     |
-    +========+=========================+===============================================+==============+==================+=================+=========================+
-    |   1    |  Source Name            | Replace source name with a shrink version     | Substring    |   source         | source          |        index [0,5]      |
-    +--------+-------------------------+-----------------------------------------------+--------------+------------------+-----------------+-------------------------+
-    |   2    |  Extract Involve IPs    | Grabs the source and destination IP           | Split&Index  |   message        | src_and_dst_IP  |        index [0,5]      |
-    +--------+-------------------------+-----------------------------------------------+--------------+------------------+-----------------+-------------------------+
-    |   3    |  Source IP with Port    | Takes out the source IP only with the port    | Split&Index  |   src_and_dst_IP | src_IP          |        index [0,5]      |
-    +--------+-------------------------+-----------------------------------------------+--------------+------------------+-----------------+-------------------------+
-    |   4    |  Destination IP         | Grabs the destination IP                      | Split&Index  |   src_and_dst_IP | dst_IP          |        index [0,5]      |
-    +--------+-------------------------+-----------------------------------------------+--------------+------------------+-----------------+-------------------------+
-    |   5    |  Replace Destination IP | Replace a clean destination IP                | Split&Index  |   dst_IP         | dst_IP          |        index [0,5]      |
-    +--------+-------------------------+-----------------------------------------------+--------------+------------------+-----------------+-------------------------+
-    |   6    |  Remove Port Source IP  | Takes out the port from the source IP         | Split&Index  |   src_IP         | src_IP          |        index [0,5]      |
-    +--------+-------------------------+-----------------------------------------------+--------------+------------------+-----------------+-------------------------+
-    |   7    |  Source Geolocation     | Places the source IP through the LookUp table | LookUP Table |   src_IP         | src_geolocation |        index [0,5]      |
-    +--------+-------------------------+-----------------------------------------------+--------------+------------------+-----------------+-------------------------+
-    |   8    |  VPN Username and IP    | Takes the username and IP                     | Split&Index  |   message        | userIP_and_Name |        index [0,5]      |
-    +--------+-------------------------+-----------------------------------------------+--------------+------------------+-----------------+-------------------------+
-    |   9    |  User and Remote IP     | Takes the user and IP into username field     | Split&Index  |   message        | username        |        index [0,5]      |
-    +--------+-------------------------+-----------------------------------------------+--------------+------------------+-----------------+-------------------------+
-    |   10   |  VPN Username           | Replace the VPN username                      | Split&Index  |   username       | username        |        index [0,5]      |
-    +--------+-------------------------+-----------------------------------------------+--------------+------------------+-----------------+-------------------------+
-    |   11   |  VPN User IP            | Takes the remote VPN IP                       | Split&Index  |   username       | vpnIP           |        index [0,5]      |
-    +--------+-------------------------+-----------------------------------------------+--------------+------------------+-----------------+-------------------------+
-    |   12   |  Replace VPN User IP    | Replaces tje VPN IP clean                     | Split&Index  |  userIP_and_Name | vpnIP           |        index [0,5]      |
-    +--------+-------------------------+-----------------------------------------------+--------------+------------------+-----------------+-------------------------+
-    |   13   |  VPN User Location      | Runs the IP through the LookUp table          | LookUP Table |   vpnIP          | vpn_location    |        index [0,5]      |
-    +--------+-------------------------+-----------------------------------------------+--------------+------------------+-----------------+-------------------------+
+    +--------+-------------------------+-----------------------------------------------+--------------+------------------+-----------------+----------------------------------+
+    | Number |        Name             |                 Description                   |    Type      |    SourceField   |  DstField       |          Configurations          |
+    +========+=========================+===============================================+==============+==================+=================+==================================+
+    |   1    |  Source Name            | Replace source name with a shrink version     | Substring    |   source         | source          | index [0,5]                      |
+    +--------+-------------------------+-----------------------------------------------+--------------+------------------+-----------------+----------------------------------+
+    |   2    |  Extract Involve IPs    | Grabs the source and destination IP           | Split&Index  |   message        | src_and_dst_IP  | index=2 & split="{TCP}"          |
+    +--------+-------------------------+-----------------------------------------------+--------------+------------------+-----------------+----------------------------------+
+    |   3    |  Source IP with Port    | Takes out the source IP only with the port    | Split&Index  |   src_and_dst_IP | src_IP          | index=1 & split="->"             |
+    +--------+-------------------------+-----------------------------------------------+--------------+------------------+-----------------+----------------------------------+
+    |   4    |  Destination IP         | Grabs the destination IP                      | Split&Index  |   src_and_dst_IP | dst_IP          | index=2 & split="->"             |
+    +--------+-------------------------+-----------------------------------------------+--------------+------------------+-----------------+----------------------------------+
+    |   5    |  Replace Destination IP | Replace a clean destination IP                | Split&Index  |   dst_IP         | dst_IP          | index=1 & split=":"              |
+    +--------+-------------------------+-----------------------------------------------+--------------+------------------+-----------------+----------------------------------+
+    |   6    |  Remove Port Source IP  | Takes out the port from the source IP         | Split&Index  |   src_IP         | src_IP          | index=1 & split=":"              |
+    +--------+-------------------------+-----------------------------------------------+--------------+------------------+-----------------+----------------------------------+
+    |   7    |  Source Geolocation     | Places the source IP through the LookUp table | LookUP Table |   src_IP         | src_geolocation | lookup_table_name: "GeoLocation" |
+    +--------+-------------------------+-----------------------------------------------+--------------+------------------+-----------------+----------------------------------+
+    |   8    |  VPN Username and IP    | Takes the username and IP                     | Split&Index  |   message        | userIP_and_Name | index=2 & split=":"              |
+    +--------+-------------------------+-----------------------------------------------+--------------+------------------+-----------------+----------------------------------+
+    |   9    |  User and Remote IP     | Takes the user and IP into username field     | Split&Index  |   message        | username        | index=1 & split=":"              |
+    +--------+-------------------------+-----------------------------------------------+--------------+------------------+-----------------+----------------------------------+
+    |   10   |  VPN Username           | Replace the VPN username                      | Split&Index  |   username       | username        | index=1 & split="/"              |
+    +--------+-------------------------+-----------------------------------------------+--------------+------------------+-----------------+----------------------------------+
+    |   11   |  VPN User IP            | Takes the remote VPN IP                       | Split&Index  |   username       | vpnIP           | index=2 & split="/"              |
+    +--------+-------------------------+-----------------------------------------------+--------------+------------------+-----------------+----------------------------------+
+    |   12   |  Replace VPN User IP    | Replaces tje VPN IP clean                     | Split&Index  |  userIP_and_Name | vpnIP           | index=2 & split="/"              |
+    +--------+-------------------------+-----------------------------------------------+--------------+------------------+-----------------+----------------------------------+
+    |   13   |  VPN User Location      | Runs the IP through the LookUp table          | LookUP Table |   vpnIP          | vpn_location    | lookup_table_name: "GeoLocation" |
+    +--------+-------------------------+-----------------------------------------------+--------------+------------------+-----------------+----------------------------------+
     
-
-II. 
-   - Name:                  Extract Involve IPs 
-   - Description: 
-   - Type:                  Split & Index 
-   - Source Field:          message 
-   - New Field:             src_and_dst_IP 
-   - Configuration:
-      i-.  index:           "2"
-      ii-. split_by:        "{TCP}"
-
-III. 
-   - Name:                  Source IP with Port 
-   - Description: 
-   - Type:                  Split&Index 
-   - Source Field:          src_and_dst_IP 
-   - New Field:             src_IP 
-   - Configuration:
-      i-.  index:           "1"
-      ii-. split_by:        "->"
-
-IV. 
-   - Name:                  Destination IP 
-   - Description: 
-   - Type:                  Split & Index 
-   - Source Field:          src_and_dst_IP 
-   - New Field:             dst_IP 
-   - Configuration:
-      i-.  index:           "2"
-      ii-. split_by:        "->"
-
-V. 
-   - Name:                  Replace Destination IP 
-   - Description: 
-   - Type:                  Split & Index 
-   - Source Field:          dst_IP 
-   - New Field:             dst_IP 
-   - Configuration:
-      i-. index:             "1"
-      ii-. split_by:         ":"
-
-VI. 
-   - Name:                   Remove Port from Source IP 
-   - Description: 
-   - Type:                   Split & Index 
-   - Source Field:           src_IP 
-   - New Field:              src_IP 
-   - Configuration:
-      i-.  index:            "1"
-      ii-. split_by:         ":"
-
-VII. 
-   - Name:                   Source Geolocation 
-   - Description: 
-   - Type:                   LookUP Table 
-   - Source Field:           src_IP 
-   - New Field:              src_geolocation 
-   - Configuration:
-      i-. lookup_table_name: "GeoLocation"
-
-VIII. 
-   - Name:                   VPN Username and IP 
-   - Description: 
-   - Type:                   Split & Index 
-   - Source Field:           message 
-   - New Field:              userIP_and_Name 
-   - Configuration:
-      i-.  index:            "2"
-      ii-. split_by:         ":"
-
-IX. 
-   - Name:                   User and Remote IP 
-   - Description: 
-   - Type:                   Split & Index 
-   - Source Field:           message 
-   - New Field:              username 
-   - Configuration:
-      i-.  index:            "1"
-      ii-. split_by:         ":"
-
-X. 
-   - Name:                   VPN Username 
-   - Description: 
-   - Type:                   Split & Index 
-   - Source Field:           username 
-   - New Field: username 
-   - Configuration:
-      i-.  index:            "1"
-      ii-. split_by:         "/"
-
-XI. 
-   - Name:                   VPN User IP 
-   - Description:
-   - Type:                   Split & Index
-   - Source Field:           username 
-   - New Field:              vpnIP 
-   - Configuration:
-      i-.  index:            "2"
-      ii-. split_by:         "/"
-
-XII. 
-   - Name:                   Replace VPN User IP 
-   - Description: 
-   - Type:                   Split & Index 
-   - Source Field:           userIP_and_Name 
-   - New Field:              vpnIP 
-   - Configuration:
-    -.  index:            "2"
-      ii-. split_by:         "/"
-
-XIII. 
-   - Name:                   VPN User Location 
-   - Description: 
-   - Type:                   LookUP Table 
-   - Source Field:           vpnIP 
-   - New Field:              vpn_location 
-   - Configuration:
-     - lookup_table_name: "GeoLocation"
-
-
 
 Network
 ^^^^^^^
