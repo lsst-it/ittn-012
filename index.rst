@@ -100,8 +100,72 @@ LSST Servers Syslogs
    - Field Name  collector
    - Field Value: servers   
 
+
+LookUP Tables
+-------------
+
+For Graylog to be able of doing some processing with the incoming logs, you need to create LookUP Tables. This allows you to use any of the incomming inputs and process them 
+into something you need. 
+
+.. _table-LookUPTable:
+
+.. table:: LookUP Tables.
+
+    +--------+-----------------------+---------------------------------------------------------+------------------+--------------------+
+    | Number |        Name           |  Description                                            |  Data Adapter    |  Caches            |
+    +========+=======================+=========================================================+==================+====================+
+    |   1    |  Source GeoLocation   | Extract and Process Source IP into coordinates          | locate-ip        | store-geolocation  |
+    +--------+-----------------------+---------------------------------------------------------+------------------+--------------------+
+    |   2    |  Resolve FQDN into IP | Pick the FQDN from a device and translate it into an IP | resolve-dns-type | dns-resolves-cache |
+    +--------+-----------------------+---------------------------------------------------------+------------------+--------------------+
+
+
+Data Adapters
+^^^^^^^^^^^^^
+
+This are the escense of the Tables. There are many types (such us CSV Files, Whois for IPs, Ransomware blocklist, among others). The Adapters take the input, i.e. source (which
+fot the matters of this example will be an FQDN), and process is according to the engine you select; so, if you selected "DNS Lookup", it will resolve the FQDN into an IP, or if
+you select "Randomware blocklist" it will look into an external database and check if the IP is listed there.
+
+.. _table-DataAdapters:
+
+.. table:: Data Adapters.
+
+    +--------+-------------------+------------------+--------------------------------------------------------------------------------------------+
+    | Number |        Name       |   Field          | Settings                                                                                   |
+    +========+===================+==================+============================================================================================+
+    |   1    |  Locate IP        | locate-ip        | File path: /usr/share/graylog/GeoLite2-City.mmdb, DB Type: City database, Refresh: disable |
+    +--------+-------------------+------------------+--------------------------------------------------------------------------------------------+
+    |   2    |  Resolve DNS name | resolve-dns-type | LookUP Type: Resolve hostname to IPv4, DNS Server: 8.8.4.4, Request Timeout: 10000ms       |
+    +--------+-------------------+------------------+--------------------------------------------------------------------------------------------+
+
+
+Caches
+^^^^^^
+
+Determines if you wanna store the processed data from the Data Adapters, where (volatile or storage) and for how long.
+
+.. _table-Caches:
+
+.. table:: Caches.
+
+    +--------+--------------------+--------------------+--------------+-----------------------+--------------------+
+    | Number |        Name        |   Field            | Max Entries  |  Expire After Access  | Expire after Write |
+    +========+====================+====================+==============+=======================+====================+
+    |   1    |  Store GeoLocation | store-geolocation  |    1000      |        60s            |      disable       |
+    +--------+--------------------+--------------------+--------------+-----------------------+--------------------+
+    |   2    |  DNS Resolve Cache | dns-resolves-cache |     500      |        30s            |      disable       |
+    +--------+--------------------+--------------------+--------------+-----------------------+--------------------+
+
+
+
 Extractors
 ----------
+
+Let's say that the source name isn't right (or is not the one you wanted), but the correct one is in between the message field, or that you would like to have a field with the 
+username of the user that is running the command and you see that the username is contained in another field. There's were Extractors come in handy: they allow you to extrac a
+determine pattern from all logs arrived and turn it into a new field. Extractors also allow you to run the extracted content through a LookUP table, meaning you can process 
+and manage the content (like looking an FQDN through a DNS resolver).
 
 Firewall
 ^^^^^^^^
@@ -238,5 +302,11 @@ graylog will find nothing through the search query. To solve it, you can dump th
    If everything goes well, you should get the following output from the above command:                                                                                                                                 
       {"acknowledged":true}
 
+Missing GeoLite Database
+------------------------
 
+Since GeoLite is done through an API, there is no persistent storage for it in the GKE environment. In order to workaround this issue, you can manually copy the database into the graylog pods:
 
+.. note::
+
+      for i in {0,1,2}; do kubectl cp ~/GeoLite2-City_20200414/GeoLite2-City.mmdb graylog/graylog-$i:/usr/share/graylog/GeoLite2-City.mmdb; done
