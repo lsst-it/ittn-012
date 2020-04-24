@@ -8,6 +8,7 @@
 
    Graylog k8s deployment and configuration
 
+.. sectnum::
 
 Introduction
 ============
