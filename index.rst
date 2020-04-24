@@ -181,41 +181,41 @@ Centralized Logging System
 
 .. table:: CLS Dashboard.
 
-    +--------+-------------------------------------------+-------------------------------------------------------------------------------------------------+-----------------+-------------+-------------+
-    | Number |                Name                       |                                         Search Query                                            | Stacked Fields  |  Pie Chart  |  Data Table |
-    +========+===========================================+=================================================================================================+=================+=============+=============+
-    |   1    |  Top Access to Servers                    | message:"Started Session" AND collector:"servers" AND NOT message:"root" OR NOT message:"admin" |    none         |             |             |
-    +--------+-------------------------------------------+-------------------------------------------------------------------------------------------------+-----------------+-------------+-------------+
-    |   2    |  Recent Root Access                       | message:"Started Session" AND collector:"servers" AND message:"root"                            |    none         |             |             |
-    +--------+-------------------------------------------+-------------------------------------------------------------------------------------------------+-----------------+-------------+-------------+
-    |   3    |  Failed Sudo Access                       | collector:servers AND message:"FAILED SU"                                                       |    none         |             |             |
-    +--------+-------------------------------------------+-------------------------------------------------------------------------------------------------+-----------------+-------------+-------------+
-    |   4    |  Failed Queries                           | source:dns?.ls.lsst.org OR source:dns1.dev.lsst.org OR message:"named" AND message:"failed"     |    none         |             |             |
-    +--------+-------------------------------------------+-------------------------------------------------------------------------------------------------+-----------------+-------------+-------------+
-    |   5    |  Succesfull Logins                        | message:"Started Session" AND collector:"servers" AND NOT message:"root" OR NOT message:"admin" |    none         |             |             |
-    +--------+-------------------------------------------+-------------------------------------------------------------------------------------------------+-----------------+-------------+-------------+
-    |   6    |  Top Access to NetDevices                 | message:"Login Success" AND collector:"network"                                                 |   none          |             |             |
-    +--------+-------------------------------------------+-------------------------------------------------------------------------------------------------+-----------------+-------------+-------------+
-    |   7    |  Flapping Interfaces                      | collector:network AND message:"flapping"                                                        |   none          |             |             |
-    +--------+-------------------------------------------+-------------------------------------------------------------------------------------------------+-----------------+-------------+-------------+
-    |   8    |  NetDev Logins                            | message:"Login Success" AND collector:"network"                                                 |   none          |             |             |
-    +--------+-------------------------------------------+-------------------------------------------------------------------------------------------------+-----------------+-------------+-------------+
-    |   9    |  Failed Logins                            | collector:network AND message:"Invalid-Credentials"                                             |   none          |             |             |
-    +--------+-------------------------------------------+-------------------------------------------------------------------------------------------------+-----------------+-------------+-------------+
-    |   10   |  DNS hits LS/Dev                          | source:dns?.ls.lsst.org OR source:dns1.dev.lsst.org OR message:"named"                          |   none          |             |             |
-    +--------+-------------------------------------------+-------------------------------------------------------------------------------------------------+-----------------+-------------+-------------+
-    |   11   |  Top Servers Talkers                      | collector:servers                                                                               |   none          |             |             |
-    +--------+-------------------------------------------+-------------------------------------------------------------------------------------------------+-----------------+-------------+-------------+
-    |   12   |  NetDev Interface Change State            | collector:network AND message: "changed state"                                                  |   none          |             |             |
-    +--------+-------------------------------------------+-------------------------------------------------------------------------------------------------+-----------------+-------------+-------------+
-    |   13   |  Top NetDev Talkers                       | collector:network                                                                               |   none          |             |             |
-    +--------+-------------------------------------------+-------------------------------------------------------------------------------------------------+-----------------+-------------+-------------+
-    |   14   |  Authorized VPN Users Location            | Runs the IP through the LookUp table                                                            |   none          |             |             |
-    +--------+-------------------------------------------+-------------------------------------------------------------------------------------------------+-----------------+-------------+-------------+
-    |   15   |  Potencial Attacks through IP Geolocation | Runs the IP through the LookUp table                                                            |   none          |             |             |
-    +--------+-------------------------------------------+-------------------------------------------------------------------------------------------------+-----------------+-------------+-------------+
-    |   16   |  VPN Location - Username - IP             | collector:firewall AND source:openv                                                             | username, vpnIP |             |             |
-    +--------+-------------------------------------------+-------------------------------------------------------------------------------------------------+-----------------+-------------+-------------+
+    +--------+-------------------------------------------+-------------------------------------------------------------------------------------------------+----------------------------------+------------------------+
+    | Number |                Name                       |                                         Search Query                                            |                Type              | Field/Stacked Fields   |
+    +========+===========================================+=================================================================================================+==================================+========================+
+    |   1    |  Top Access to Servers                    | message:"Started Session" AND collector:"servers" AND NOT message:"root" OR NOT message:"admin" | Quick Value with Pie Chart&Table | source/none            |
+    +--------+-------------------------------------------+-------------------------------------------------------------------------------------------------+----------------------------------+------------------------+
+    |   2    |  Recent Root Access                       | message:"Started Session" AND collector:"servers" AND message:"root"                            | Quick Value with Pie Chart&Table | source/none            |
+    +--------+-------------------------------------------+-------------------------------------------------------------------------------------------------+----------------------------------+------------------------+
+    |   3    |  Failed Sudo Access                       | collector:servers AND message:"FAILED SU"                                                       | Quick Value                      | source/none            |
+    +--------+-------------------------------------------+-------------------------------------------------------------------------------------------------+----------------------------------+------------------------+
+    |   4    |  Failed Queries                           | source:dns?.ls.lsst.org OR source:dns1.dev.lsst.org OR message:"named" AND message:"failed"     | Quick Value                      | source/none            |
+    +--------+-------------------------------------------+-------------------------------------------------------------------------------------------------+----------------------------------+------------------------+
+    |   5    |  Succesfull Logins                        | message:"Started Session" AND collector:"servers" AND NOT message:"root" OR NOT message:"admin" | Quick Value                      | source/none            |
+    +--------+-------------------------------------------+-------------------------------------------------------------------------------------------------+----------------------------------+------------------------+
+    |   6    |  Top Access to NetDevices                 | message:"Login Success" AND collector:"network"                                                 | Quick Value with Pie Chart&Table | source/none            |
+    +--------+-------------------------------------------+-------------------------------------------------------------------------------------------------+----------------------------------+------------------------+
+    |   7    |  Flapping Interfaces                      | collector:network AND message:"flapping"                                                        | Quick Value                      | source/none            |
+    +--------+-------------------------------------------+-------------------------------------------------------------------------------------------------+----------------------------------+------------------------+
+    |   8    |  NetDev Logins                            | message:"Login Success" AND collector:"network"                                                 | Quick Value                      | source/none            |
+    +--------+-------------------------------------------+-------------------------------------------------------------------------------------------------+----------------------------------+------------------------+
+    |   9    |  Failed Logins                            | collector:network AND message:"Invalid-Credentials"                                             | Quick Value                      | source/none            |
+    +--------+-------------------------------------------+-------------------------------------------------------------------------------------------------+----------------------------------+------------------------+
+    |   10   |  DNS hits LS/Dev                          | source:dns?.ls.lsst.org OR source:dns1.dev.lsst.org OR message:"named"                          | Quick Value with Pie Chart&Table | source/none            |
+    +--------+-------------------------------------------+-------------------------------------------------------------------------------------------------+----------------------------------+------------------------+
+    |   11   |  Top Servers Talkers                      | collector:servers                                                                               | Histogram                        | source/none            |
+    +--------+-------------------------------------------+-------------------------------------------------------------------------------------------------+----------------------------------+------------------------+
+    |   12   |  NetDev Interface Change State            | collector:network AND message: "changed state"                                                  | Histogram                        | source/none            |
+    +--------+-------------------------------------------+-------------------------------------------------------------------------------------------------+----------------------------------+------------------------+
+    |   13   |  Top NetDev Talkers                       | collector:network                                                                               | Histogram                        | source/none            |
+    +--------+-------------------------------------------+-------------------------------------------------------------------------------------------------+----------------------------------+------------------------+
+    |   14   |  Authorized VPN Users Location            | Runs the IP through the LookUp table                                                            | GeoMap                           | src_location/none      |
+    +--------+-------------------------------------------+-------------------------------------------------------------------------------------------------+----------------------------------+------------------------+
+    |   15   |  Potencial Attacks through IP Geolocation | Runs the IP through the LookUp table                                                            | GeoMap                           | src_location/none      |
+    +--------+-------------------------------------------+-------------------------------------------------------------------------------------------------+----------------------------------+------------------------+
+    |   16   |  VPN Location - Username - IP             | collector:firewall AND source:openv                                                             | Quick Value with Table           | source/username, vpnIP | 
+    +--------+-------------------------------------------+-------------------------------------------------------------------------------------------------+----------------------------------+------------------------+
     
 
 Common Issues and Solutions
@@ -238,65 +238,5 @@ graylog will find nothing through the search query. To solve it, you can dump th
    If everything goes well, you should get the following output from the above command:                                                                                                                                 
       {"acknowledged":true}
 
-..
-  Technote content.
 
-  See https://developer.lsst.io/restructuredtext/style.html
-  for a guide to reStructuredText writing.
-
-  Do not put the title, authors or other metadata in this document;
-  those are automatically added.
-
-  Use the following syntax for sections:
-
-  Sections
-  ========
-
-  and
-
-  Subsections
-  -----------
-
-  and
-
-  Subsubsections
-  ^^^^^^^^^^^^^^
-
-  To add images, add the image file (png, svg or jpeg preferred) to the
-  _static/ directory. The reST syntax for adding the image is
-
-  .. figure:: /_static/filename.ext
-     :name: fig-label
-
-     Caption text.
-
-   Run: ``make html`` and ``open _build/html/index.html`` to preview your work.
-   See the README at https://github.com/lsst-sqre/lsst-technote-bootstrap or
-   this repo's README for more info.
-
-   Feel free to delete this instructional comment.
-
-:tocdepth: 1
-
-.. Please do not modify tocdepth; will be fixed when a new Sphinx theme is shipped.
-
-.. sectnum::
-
-.. TODO: Delete the note below before merging new content to the master branch.
-
-.. note::
-
-   **This technote is not yet published.**
-
-   Hierarchical instructions for graylog deployment over GKE and all configurations for dashboards, extractors and lookup tables
-
-.. Add content here.
-.. Do not include the document title (it's automatically added from metadata.yaml).
-
-.. .. rubric:: References
-
-.. Make in-text citations with: :cite:`bibkey`.
-
-.. .. bibliography:: local.bib lsstbib/books.bib lsstbib/lsst.bib lsstbib/lsst-dm.bib lsstbib/refs.bib lsstbib/refs_ads.bib
-..    :style: lsst_aa
 
