@@ -31,7 +31,7 @@ load balancer. In this particular deployment, we are using:
 - rook/ceph v1.3.1
 - Helm v3.0
 
-This was done through Joshua's Hoblitt procedure https://github.com/lsst-it/k8s-cookbook.git
+This was done through Joshua Hoblitt's procedure https://github.com/lsst-it/k8s-cookbook.git
 
 
 Charts and Plugins deployment
@@ -339,7 +339,8 @@ LSST Network Syslogs
 Add it, and then "More actions -> Add Static Field":
 
 - Field Name  collector
-- Field Value: network
+- Field Value: network   
+
 
 3. 
 LSST Servers Syslogs
