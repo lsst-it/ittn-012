@@ -34,13 +34,16 @@ load balancer. In this particular deployment, we are using:
 This was done through Joshua's Hobblit procedure https://github.com/lsst-it/k8s-cookbook.git
 
 
-Certificate Manager
-===================
+Charts and Plugins deployment
+=============================
 
-The Certificate Manager allows you to use self-generated certificates (intended for secure connection)
+A Certificate Manager allows you to use self-generated certificates (intended for secure connection)
 and through a Issuer or ClusterIssuer (the first one requires one per namespace) authenticates the 
 certificate against a letsencrypt server. This will result in a completely secured website with no 
 warnings of insecure connection or self-signed certificates.
+
+There are also some plugins that will helm your daily needs, that needs to be set up through the values
+you pass onto graylog helm deployment.
 
 AWS Credencials
 ---------------
@@ -174,8 +177,42 @@ Now create the Cluster Issuer:
    kubectl apply -f letsencrypt.yaml
 
 
-Graylog Helm Chart and values.yaml
-==================================
+Graylog Deployment
+------------------
+
+GeoIP Plugin
+^^^^^^^^^^^^
+
+GeoLocation is a very useful plugin, that allows you to geolocate IPs (with specific coordinates) so you can then plot them 
+into a map. The way it use to work, is thta it was "common access" for everyone, and you just needed to point the url to the
+precise location; but since the last update, you must follow the instructions from:
+
+https://blog.maxmind.com/2019/12/18/significant-changes-to-accessing-and-using-geolite2-databases/
+
+They can summarize in the following:
+
+- Create an account in MaxMind (free of charge) https://www.maxmind.com/en/geolite2/signup
+- Once log in, set your password and create a license key https://www.maxmind.com/en/accounts/current/license-key
+- In the host server, which it will be running the graylog chart, install GeoIP Update" and fill up the GeoIP.conf
+file with the information provisioned to you in the previous step: https://dev.maxmind.com/geoip/geoipupdate/#For_Free_GeoLite2_Databases
+
+.. code-block:: bash
+   
+   # GeoIP.conf file - used by geoipupdate program to update databases
+   # from http://www.maxmind.com
+   AccountID YOUR_ACCOUNT_ID_HERE
+   LicenseKey YOUR_LICENSE_KEY_HERE
+   EditionIDs YOUR_EDITION_IDS_HERE
+
+Since graylog will have a user restriction, we recomment setting a copy of the database to a common share space:
+
+.. code-block:: bash
+   
+   35 10 * * 3 /bin/geoipupdate; /bin/cp /usr/share/GeoIP/GeoLite2-City.mmdb /var/tmp/GeoLite.mmdb
+
+
+Graylog Helm Chart with values.yaml
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 There is a bug in the default graylog chart, so we are going to deploy it, with te values we require and then repair it.
 
