@@ -13,30 +13,29 @@
 Introduction
 ============
 
-Hierarchical construction, deployment and configuration of a Graylog chart over GKE
+Hierarchical construction, deployment and configuration of a Graylog chart over RKE
 
 Requirements
 ============
 
-Google Cloud Platform account
------------------------------
+The cluster in which you are going to deploy the Graylog instance, has to be already
+configured with an orchestrator, persistent volume manager, ingress controller and
+load balancer. In this particular deployment, we are using:
 
-In order to correctly deploy the chart over GKE (Google Kubernetes Engine), it is
-needed for you to have a payed account, and sufficient priviledges to create a 
-cluster and nodes among it.
+- RKE v1.0.4
+- nginx-ingress v1.7.0
+- metallb v0.8.3
+- rook/ceph v1.3.1
 
-
-Creating the Cluster
-====================
-
-
-GCloud and kubectl extension
-============================
+This was done through Joshua's Hobblit procedure https://github.com/lsst-it/k8s-cookbook.git
 
 
 Helm charts and values.yaml
 ===========================
 
+
+Certificate Manager
+===================
 
 Ingress Controller
 ===================
@@ -67,6 +66,7 @@ LSST Firewall Syslogs
 - store_full_message: true
 
 Add it, and then "More actions -> Add Static Field":
+
 - Field Name  collector
 - Field Value: firewall
 
@@ -84,6 +84,7 @@ LSST Network Syslogs
 - store_full_message: true
 
 Add it, and then "More actions -> Add Static Field":
+
 - Field Name  collector
 - Field Value: network
 
@@ -101,6 +102,7 @@ LSST Servers Syslogs
 - store_full_message: true
 
 Add it, and then "More actions -> Add Static Field":
+
 - Field Name  collector
 - Field Value: servers   
 
