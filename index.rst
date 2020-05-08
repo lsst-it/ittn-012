@@ -55,51 +55,54 @@ Adding the Inputs
 
 1. 
 LSST Firewall Syslogs
-   - allow_override_data: true
-   - bind_address: 0.0.0.0
-   - expand_structured_data: true
-   - force_rdns: false
-   - number_worker_threads: 2
-   - override_source: <empty>
-   - port: 7514
-   - recv_buffer_size: 262144
-   - store_full_message: true
 
-   Add it, and then "More actions -> Add Static Field":
-   - Field Name  collector
-   - Field Value: firewall
+- allow_override_data: true
+- bind_address: 0.0.0.0
+- expand_structured_data: true
+- force_rdns: false
+- number_worker_threads: 2
+- override_source: <empty>
+- port: 7514
+- recv_buffer_size: 262144
+- store_full_message: true
+
+Add it, and then "More actions -> Add Static Field":
+- Field Name  collector
+- Field Value: firewall
 
 2. 
 LSST Network Syslogs
-   - allow_override_data: true
-   - bind_address: 0.0.0.0
-   - expand_structured_data: true
-   - force_rdns: false
-   - number_worker_threads: 1
-   - override_source: <empty>
-   - port: 6514
-   - recv_buffer_size: 262144
-   - store_full_message: true
 
-   Add it, and then "More actions -> Add Static Field":
-   - Field Name  collector
-   - Field Value: network
+- allow_override_data: true
+- bind_address: 0.0.0.0
+- expand_structured_data: true
+- force_rdns: false
+- number_worker_threads: 1
+- override_source: <empty>
+- port: 6514
+- recv_buffer_size: 262144
+- store_full_message: true
+
+Add it, and then "More actions -> Add Static Field":
+- Field Name  collector
+- Field Value: network
 
 3. 
 LSST Servers Syslogs
-   - allow_override_data: true
-   - bind_address: 0.0.0.0
-   - expand_structured_data: true
-   - force_rdns: false
-   - number_worker_threads: 1
-   - override_source: <empty>
-   - port: 5514
-   - recv_buffer_size: 262144
-   - store_full_message: true
 
-   Add it, and then "More actions -> Add Static Field":
-   - Field Name  collector
-   - Field Value: servers   
+- allow_override_data: true
+- bind_address: 0.0.0.0
+- expand_structured_data: true
+- force_rdns: false
+- number_worker_threads: 1
+- override_source: <empty>
+- port: 5514
+- recv_buffer_size: 262144
+- store_full_message: true
+
+Add it, and then "More actions -> Add Static Field":
+- Field Name  collector
+- Field Value: servers   
 
 
 LookUP Tables
@@ -208,7 +211,7 @@ Firewall
 
 .. notes::
 
-   Extractors json
+   Firewall Extractors JSON
 
    {
    "extractors": [
@@ -591,6 +594,45 @@ Network
     +--------+---------------------+-----------------------------------------------+--------------+------------------+-----------------+---------------------+
 
 
+.. notes::
+
+   Network Extractors JSON
+   {
+   "extractors": [
+    {
+      "title": "Extract Source",
+      "extractor_type": "split_and_index",
+      "converters": [],
+      "order": 0,
+      "cursor_strategy": "copy",
+      "source_field": "message",
+      "target_field": "s_id",
+      "extractor_config": {
+        "index": 1,
+        "split_by": ":"
+      },
+      "condition_type": "none",
+      "condition_value": ""
+    },
+    {
+      "title": "Hostname Extractor",
+      "extractor_type": "split_and_index",
+      "converters": [],
+      "order": 0,
+      "cursor_strategy": "copy",
+      "source_field": "s_id",
+      "target_field": "source",
+      "extractor_config": {
+        "index": 2,
+        "split_by": "\""
+      },
+      "condition_type": "none",
+      "condition_value": ""
+    }
+   ],
+   "version": "3.1.4"
+   }
+
 Servers
 ^^^^^^^
 
@@ -604,6 +646,27 @@ Servers
     |   1    |  FQDN to IP resolve | Take the FQDN and resolve it into the IP      | LookUP Table |     source    | fqdn_to_ip  | lookup_table_name: "Resolve FQDN to IP" |
     +--------+---------------------+-----------------------------------------------+--------------+---------------+-------------+-----------------------------------------+
     
+.. notes::
+
+    {
+    "extractors": [
+    {
+      "title": "FQDN to IP resolve",
+      "extractor_type": "lookup_table",
+      "converters": [],
+      "order": 0,
+      "cursor_strategy": "copy",
+      "source_field": "source",
+      "target_field": "fqdn_to_ip",
+      "extractor_config": {
+        "lookup_table_name": "fqdn-to-ip"
+      },
+      "condition_type": "none",
+      "condition_value": ""
+    }
+   ],
+   "version": "3.1.4"
+   }
 
 Dashboards
 ----------
