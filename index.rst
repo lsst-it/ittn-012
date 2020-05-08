@@ -52,7 +52,7 @@ First of all, you need to create over Amazon Web Service, a new IAM Policy with 
 (the name was choosen arbitrarily, but you must be consistent with your choice) with the following JSON
 content:
 
-.. note::
+.. code-block:: json
 
    {
     "Version": "2012-10-17",
@@ -102,7 +102,7 @@ Secret Resource
 
 We first need to create a Secret resource to hold the AWS credentials
 
-.. note::
+.. code-block:: bash
 
    kubectl create ns cert-manager               #Creates the cert-manager namespace
    cat > secret.yaml << END                     #Creates a yaml file with the secret resource
@@ -122,7 +122,7 @@ Installing jetstack repo, update CRDs nad install cert-manager
 
 Next, we are going to install the helm repo for cert-mnagaer and update the systems CRDs in order to continue:
 
-.. notes::
+.. code-block:: bash
 
    helm repo add jetstack https://charts.jetstack.io
    kubectl apply -f https://raw.githubusercontent.com/jetstack/cert-manager/release-0.11/deploy/manifests/00-crds.yaml --validate=false
@@ -137,7 +137,7 @@ Letsencrypt ClusterIssuer
 
 Finally, we now need to create the yaml file for the ClusterIssuer:
 
-.. note::
+.. code-block:: bash
    
    cat > letsencrypt.yaml << END
    apiVersion: cert-manager.io/v1alpha2
@@ -170,7 +170,7 @@ value we added in within it.
 
 Now create the Cluster Issuer:
 
-.. note::
+.. code-block:: bash
    kubectl apply -f letsencrypt.yaml
 
 
@@ -179,7 +179,7 @@ Graylog Helm Chart and values.yaml
 
 There is a bug in the default graylog chart, so we are going to deploy it, with te values we require and then repair it.
 
-.. note::
+.. code-block:: bash
    
    cat > values.yaml << END
    ---
@@ -238,14 +238,14 @@ Remember to replace the parameters with the ones you are going to use, in this c
 
 Then, we run the installation through helm:
 
-.. note::
+.. code-block:: bash
 
    kubectl create ns graylog                #Create graylog namespace
    helm install graylog -n graylog stable/graylog -f values.yaml
 
 As soon as we run the last command, we must rectify graylog's configmap:
 
-.. note::
+.. code-block:: bash
 
    kubectl edit configmap graylog -n graylog
    ##Inside the editting mode, search and replace "http_external_uri = http"
@@ -255,7 +255,7 @@ As soon as we run the last command, we must rectify graylog's configmap:
 
 Once done, you can pattiently wait for the pods to reissue themselfs or you can force restart them:
 
-.. note::
+.. code-block:: bash
    
    for i in {0..2}; do kubectl delete pod -n graylog graylog-$i; done
 
@@ -427,7 +427,7 @@ Firewall
     +--------+-------------------------+-----------------------------------------------+--------------+------------------+-----------------+----------------------------------+
 
 
-.. notes::
+.. code-block:: json
 
    Firewall Extractors JSON
 
@@ -812,7 +812,7 @@ Network
     +--------+---------------------+-----------------------------------------------+--------------+------------------+-----------------+---------------------+
 
 
-.. notes::
+.. code-block:: json
 
    Network Extractors JSON
    {
@@ -864,7 +864,7 @@ Servers
     |   1    |  FQDN to IP resolve | Take the FQDN and resolve it into the IP      | LookUP Table |     source    | fqdn_to_ip  | lookup_table_name: "Resolve FQDN to IP" |
     +--------+---------------------+-----------------------------------------------+--------------+---------------+-------------+-----------------------------------------+
     
-.. notes::
+.. code-block:: json
 
     {
     "extractors": [
@@ -961,3 +961,6 @@ Since GeoLite is done through an API, there is no persistent storage for it in t
 .. note::
 
       for i in {0,1,2}; do kubectl cp ~/GeoLite2-City_20200414/GeoLite2-City.mmdb graylog/graylog-$i:/usr/share/graylog/GeoLite2-City.mmdb; done
+
+
+:tocdepth: 1
