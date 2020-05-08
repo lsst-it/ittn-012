@@ -204,7 +204,376 @@ Firewall
     +--------+-------------------------+-----------------------------------------------+--------------+------------------+-----------------+----------------------------------+
     |   13   |  VPN User Location      | Runs the IP through the LookUp table          | LookUP Table |   vpnIP          | vpn_location    | lookup_table_name: "GeoLocation" |
     +--------+-------------------------+-----------------------------------------------+--------------+------------------+-----------------+----------------------------------+
-    
+
+
+.. notes::
+
+   Extractors json
+
+   {
+   "extractors": [
+    {
+      "title": "Extract involve IPs",
+      "extractor_type": "split_and_index",
+      "converters": [],
+      "order": 1,
+      "cursor_strategy": "copy",
+      "source_field": "message",
+      "target_field": "src_and_dst_IP",
+      "extractor_config": {
+        "index": 2,
+        "split_by": "{TCP}"
+      },
+      "condition_type": "none",
+      "condition_value": ""
+    },
+    {
+      "title": "VPN Username and IP",
+      "extractor_type": "split_and_index",
+      "converters": [],
+      "order": 7,
+      "cursor_strategy": "copy",
+      "source_field": "message",
+      "target_field": "userIP_and_Name",
+      "extractor_config": {
+        "index": 2,
+        "split_by": ":"
+      },
+      "condition_type": "none",
+      "condition_value": ""
+    },
+    {
+      "title": "User and Remote IP",
+      "extractor_type": "split_and_index",
+      "converters": [],
+      "order": 8,
+      "cursor_strategy": "copy",
+      "source_field": "message",
+      "target_field": "username",
+      "extractor_config": {
+        "index": 2,
+        "split_by": ":"
+      },
+      "condition_type": "none",
+      "condition_value": ""
+    },
+    {
+      "title": "Remove Port from Source IP",
+      "extractor_type": "split_and_index",
+      "converters": [],
+      "order": 5,
+      "cursor_strategy": "copy",
+      "source_field": "src_IP",
+      "target_field": "src_IP",
+      "extractor_config": {
+        "index": 1,
+        "split_by": ":"
+      },
+      "condition_type": "none",
+      "condition_value": ""
+    },
+    {
+      "title": "Destination IP",
+      "extractor_type": "split_and_index",
+      "converters": [],
+      "order": 3,
+      "cursor_strategy": "copy",
+      "source_field": "src_and_dst_IP",
+      "target_field": "dst_IP",
+      "extractor_config": {
+        "index": 2,
+        "split_by": "->"
+      },
+      "condition_type": "none",
+      "condition_value": ""
+    },
+    {
+      "title": "Source IP with Port",
+      "extractor_type": "split_and_index",
+      "converters": [],
+      "order": 2,
+      "cursor_strategy": "copy",
+      "source_field": "src_and_dst_IP",
+      "target_field": "src_IP",
+      "extractor_config": {
+        "index": 1,
+        "split_by": "->"
+      },
+      "condition_type": "none",
+      "condition_value": ""
+    },
+    {
+      "title": "VPN Username",
+      "extractor_type": "split_and_index",
+      "converters": [],
+      "order": 9,
+      "cursor_strategy": "copy",
+      "source_field": "username",
+      "target_field": "username",
+      "extractor_config": {
+        "index": 1,
+        "split_by": "/"
+      },
+      "condition_type": "none",
+      "condition_value": ""
+    },
+    {
+      "title": "VPN User IP",
+      "extractor_type": "split_and_index",
+      "converters": [],
+      "order": 10,
+      "cursor_strategy": "copy",
+      "source_field": "username",
+      "target_field": "vpnIP",
+      "extractor_config": {
+        "index": 2,
+        "split_by": "/"
+      },
+      "condition_type": "none",
+      "condition_value": ""
+    },
+    {
+      "title": "Source Name",
+      "extractor_type": "substring",
+      "converters": [],
+      "order": 0,
+      "cursor_strategy": "copy",
+      "source_field": "source",
+      "target_field": "source",
+      "extractor_config": {
+        "end_index": 5,
+        "begin_index": 0
+      },
+      "condition_type": "none",
+      "condition_value": ""
+    },
+    {
+      "title": "Replace VPN User IP",
+      "extractor_type": "split_and_index",
+      "converters": [],
+      "order": 11,
+      "cursor_strategy": "copy",
+      "source_field": "userIP_and_Name",
+      "target_field": "vpnIP",
+      "extractor_config": {
+        "index": 2,
+        "split_by": "/"
+      },
+      "condition_type": "none",
+      "condition_value": ""
+    },
+    {
+      "title": "Replace Destination IP",
+      "extractor_type": "split_and_index",
+      "converters": [],
+      "order": 4,
+      "cursor_strategy": "copy",
+      "source_field": "dst_IP",
+      "target_field": "dst_IP",
+      "extractor_config": {
+        "index": 1,
+        "split_by": ":"
+      },
+      "condition_type": "none",
+      "condition_value": ""
+    },
+    {
+      "title": "Source Name",
+      "extractor_type": "substring",
+      "converters": [],
+      "order": 0,
+      "cursor_strategy": "copy",
+      "source_field": "source",
+      "target_field": "source",
+      "extractor_config": {
+        "end_index": 5,
+        "begin_index": 0
+      },
+      "condition_type": "none",
+      "condition_value": ""
+    },
+    {
+      "title": "Destination IP",
+      "extractor_type": "split_and_index",
+      "converters": [],
+      "order": 3,
+      "cursor_strategy": "copy",
+      "source_field": "src_and_dst_IP",
+      "target_field": "dst_IP",
+      "extractor_config": {
+        "index": 2,
+        "split_by": "->"
+      },
+      "condition_type": "none",
+      "condition_value": ""
+    },
+    {
+      "title": "Extract involve IPs",
+      "extractor_type": "split_and_index",
+      "converters": [],
+      "order": 1,
+      "cursor_strategy": "copy",
+      "source_field": "message",
+      "target_field": "src_and_dst_IP",
+      "extractor_config": {
+        "index": 2,
+        "split_by": "{TCP}"
+      },
+      "condition_type": "none",
+      "condition_value": ""
+    },
+    {
+      "title": "Source Geolocation",
+      "extractor_type": "lookup_table",
+      "converters": [],
+      "order": 6,
+      "cursor_strategy": "copy",
+      "source_field": "src_IP",
+      "target_field": "src_geolocation",
+      "extractor_config": {
+        "lookup_table_name": "GeoLocation"
+      },
+      "condition_type": "none",
+      "condition_value": ""
+    },
+    {
+      "title": "User and Remote IP",
+      "extractor_type": "split_and_index",
+      "converters": [],
+      "order": 8,
+      "cursor_strategy": "copy",
+      "source_field": "message",
+      "target_field": "username",
+      "extractor_config": {
+        "index": 2,
+        "split_by": ":"
+      },
+      "condition_type": "none",
+      "condition_value": ""
+    },
+    {
+      "title": "VPN Username",
+      "extractor_type": "split_and_index",
+      "converters": [],
+      "order": 9,
+      "cursor_strategy": "copy",
+      "source_field": "username",
+      "target_field": "username",
+      "extractor_config": {
+        "index": 1,
+        "split_by": "/"
+      },
+      "condition_type": "none",
+      "condition_value": ""
+    },
+    {
+      "title": "VPN User Location",
+      "extractor_type": "lookup_table",
+      "converters": [],
+      "order": 12,
+      "cursor_strategy": "copy",
+      "source_field": "vpnIP",
+      "target_field": "vpn_location",
+      "extractor_config": {
+        "lookup_table_name": "GeoLocation"
+      },
+      "condition_type": "none",
+      "condition_value": ""
+    },
+    {
+      "title": "Replace Destination IP",
+      "extractor_type": "split_and_index",
+      "converters": [],
+      "order": 4,
+      "cursor_strategy": "copy",
+      "source_field": "dst_IP",
+      "target_field": "dst_IP",
+      "extractor_config": {
+        "index": 1,
+        "split_by": ":"
+      },
+      "condition_type": "none",
+      "condition_value": ""
+    },
+    {
+      "title": "VPN User IP",
+      "extractor_type": "split_and_index",
+      "converters": [],
+      "order": 10,
+      "cursor_strategy": "copy",
+      "source_field": "username",
+      "target_field": "vpnIP",
+      "extractor_config": {
+        "index": 2,
+        "split_by": "/"
+      },
+      "condition_type": "none",
+      "condition_value": ""
+    },
+    {
+      "title": "VPN Username and IP",
+      "extractor_type": "split_and_index",
+      "converters": [],
+      "order": 7,
+      "cursor_strategy": "copy",
+      "source_field": "message",
+      "target_field": "userIP_and_Name",
+      "extractor_config": {
+        "index": 2,
+        "split_by": ":"
+      },
+      "condition_type": "none",
+      "condition_value": ""
+    },
+    {
+      "title": "Source IP with Port",
+      "extractor_type": "split_and_index",
+      "converters": [],
+      "order": 2,
+      "cursor_strategy": "copy",
+      "source_field": "src_and_dst_IP",
+      "target_field": "src_IP",
+      "extractor_config": {
+        "index": 1,
+        "split_by": "->"
+      },
+      "condition_type": "none",
+      "condition_value": ""
+    },
+    {
+      "title": "Remove Port from Source IP",
+      "extractor_type": "split_and_index",
+      "converters": [],
+      "order": 5,
+      "cursor_strategy": "copy",
+      "source_field": "src_IP",
+      "target_field": "src_IP",
+      "extractor_config": {
+        "index": 1,
+        "split_by": ":"
+      },
+      "condition_type": "none",
+      "condition_value": ""
+    },
+    {
+      "title": "Replace VPN User IP",
+      "extractor_type": "split_and_index",
+      "converters": [],
+      "order": 11,
+      "cursor_strategy": "copy",
+      "source_field": "userIP_and_Name",
+      "target_field": "vpnIP",
+      "extractor_config": {
+        "index": 2,
+        "split_by": "/"
+      },
+      "condition_type": "none",
+      "condition_value": ""
+    }
+  ],
+  "version": "3.1.4"
+  }
+
 
 Network
 ^^^^^^^
