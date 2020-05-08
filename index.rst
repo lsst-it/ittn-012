@@ -6,14 +6,17 @@
 
    **This technote is not yet published.**
 
-   Graylog k8s deployment and configuration
+   Graylog over RKE
 
 .. sectnum::
+
 
 Introduction
 ============
 
-Hierarchical construction, deployment and configuration of a Graylog chart over RKE
+Hierarchical construction, deployment and configuration of a Graylog chart over RKE. All authentication
+instructions and users/passwords creations will be done omitting any sensitive information; so they are 
+just random information (not usable)
 
 Requirements
 ============
@@ -26,28 +29,241 @@ load balancer. In this particular deployment, we are using:
 - nginx-ingress v1.7.0
 - metallb v0.8.3
 - rook/ceph v1.3.1
+- Helm v3.0
 
 This was done through Joshua's Hobblit procedure https://github.com/lsst-it/k8s-cookbook.git
-
-
-Helm charts and values.yaml
-===========================
 
 
 Certificate Manager
 ===================
 
-Ingress Controller
-===================
+The Certificate Manager allows you to use self-generated certificates (intended for secure connection)
+and through a Issuer or ClusterIssuer (the first one requires one per namespace) authenticates the 
+certificate against a letsencrypt server. This will result in a completely secured website with no 
+warnings of insecure connection or self-signed certificates.
+
+AWS Credencials
+---------------
+
+IAM Policy
+^^^^^^^^^^
+
+First of all, you need to create over Amazon Web Service, a new IAM Policy with the name "cert-manager"
+(the name was choosen arbitrarily, but you must be consistent with your choice) with the following JSON
+content:
+
+.. note::
+
+   {
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Action": "route53:GetChange",
+            "Resource": "arn:aws:route53:::change/*"
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "route53:ChangeResourceRecordSets",
+                "route53:ListResourceRecordSets"
+            ],
+            "Resource": "arn:aws:route53:::hostedzone/*"
+        },
+        {
+            "Effect": "Allow",
+            "Action": "route53:ListHostedZonesByName",
+            "Resource": "*"
+        }
+    ]
+    }
+
+AWS User
+^^^^^^^^
+
+For the user creation:
+
+- Choose a name (i.e. cert-manager, which holds no relationship with the Policy name,
+just consistency) and then select the Access Type to "Programmatic Access".
+
+- In the next section, Set Permissions, select "Attach existing policies directly" and select the one we early created; 
+in this case, cert-manager.
+
+- No tags required
+
+- Right done or better download as a csv the aws keys
 
 
-Deploying the charts
-====================
+Cert-Manager Installation with letsencrypt as ClusterIssuer
+-----------------------------------------------------------
+
+Secret Resource
+^^^^^^^^^^^^^^^
+
+We first need to create a Secret resource to hold the AWS credentials
+
+.. note::
+
+   kubectl create ns cert-manager               #Creates the cert-manager namespace
+   cat > secret.yaml << END                     #Creates a yaml file with the secret resource
+   apiVersion: v1
+   kind: Secret
+   metadata:
+     name: aws-route53
+     namespace: cert-manager
+   data:
+     aws_key: $(SECRET_ACCESS_KEY | base64)
+   END
+   kubectl apply -f secret.yaml                 #Deploys the resourse inside the cert-manager ns
+
+
+Installing jetstack repo, update CRDs nad install cert-manager
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Next, we are going to install the helm repo for cert-mnagaer and update the systems CRDs in order to continue:
+
+.. notes::
+
+   helm repo add jetstack https://charts.jetstack.io
+   kubectl apply -f https://raw.githubusercontent.com/jetstack/cert-manager/release-0.11/deploy/manifests/00-crds.yaml --validate=false
+   helm install cert-manager -n cert-manager jetstack/cert-manager
+
+
+The first command installs the repo, the second one updates the CRD entries and the third one installs cert-manager
+in the cert-manager namespace.
+
+Letsencrypt ClusterIssuer
+^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Finally, we now need to create the yaml file for the ClusterIssuer:
+
+.. note::
+   
+   cat > letsencrypt.yaml << END
+   apiVersion: cert-manager.io/v1alpha2
+   kind: ClusterIssuer
+   metadata:
+   name: letsencrypt
+   namespace: cert-manager
+   spec:
+   acme:
+     server: https://acme-v02.api.letsencrypt.org/directory 
+      privateKeySecretRef:
+      name: letsencrypt
+      email: hreinking@lsst.org
+      solvers:
+      - selector:
+          dnsZones:
+          - "ls.lsst.org"
+      dns01:
+            route53:
+            region: us-east-1
+            hostedZoneID: $(ID_FOR_THE_ZONE)
+            accessKeyID:$(AWS_ID_KEY) 
+            secretAccessKeySecretRef: 
+                name: aws-route53
+                key: aws_key 
+    END
+
+Keep in mind that the secretAccessKeySecretRef uses the name of the secret we already created, and key takes the specific
+value we added in within it.
+
+Now create the Cluster Issuer:
+
+.. note::
+   kubectl apply -f letsencrypt.yaml
+
+
+Graylog Helm Chart and values.yaml
+==================================
+
+There is a bug in the default graylog chart, so we are going to deploy it, with te values we require and then repair it.
+
+.. note::
+   
+   cat > values.yaml << END
+   ---
+   graylog:
+   replicas: 3
+   persistence:
+       enabled: true
+       accessMode: ReadWriteOnce
+       size: "100Gi"
+       storageClassName: rook-ceph-block
+   plugins:
+       - name: graylog-plugin-slack-notification-3.1.0.jar
+       url: https://github.com/omise/graylog-plugin-slack-notification/releases/download/v3.1.0/graylog-plugin-slack-notification-3.1.0.jar
+   service:
+       type: ClusterIP 
+       port: 9000
+       master:
+       enabled: true
+       port: 9000
+   externalUri: "fully_qualified_domain_name" 
+   input:
+       udp:
+       service:
+           type: LoadBalancer 
+       ports:
+           - name: syslog
+               port: 5514
+           - name: network
+               port: 6514
+           - name: firewall
+               port: 7514
+   extraVolumeMounts:
+       - mountPath: /usr/share/GeoIP
+       subPath: GeoIP
+       name: geoip
+   extraVolumes:
+       - name: geoip
+       hostPath: 
+           path: /var/tmp
+   rootTimezone: "UTC"
+   ingress:
+       enabled: true
+       annotations:
+       kubernetes.io/ingress.class: nginx
+       nginx.ingress.kubernetes.io/ssl-passthrough: "true"
+       cert-manager.io/cluster-issuer: "letsencrypt"
+       hosts:
+       - "fully_qualified_domain_name"
+       tls:
+       - secretName: "NAME_FOR_THE_TLS_SECRET"
+           hosts:
+           - "fully_qualified_domain_name"
+   END 
+
+Remember to replace the parameters with the ones you are going to use, in this case "fully_qualified_domain_name" and "NAME_FOR_THE_TLS_SECRET".
+
+Then, we run the installation through helm:
+
+.. note::
+
+   kubectl create ns graylog                #Create graylog namespace
+   helm install graylog -n graylog stable/graylog -f values.yaml
+
+As soon as we run the last command, we must rectify graylog's configmap:
+
+.. note::
+
+   kubectl edit configmap graylog -n graylog
+   ##Inside the editting mode, search and replace "http_external_uri = http"
+   ##for "http_external_uri = https"
+   ##
+   ##Save and exite the editor 
+
+Once done, you can pattiently wait for the pods to reissue themselfs or you can force restart them:
+
+.. note::
+   
+   for i in {0..2}; do kubectl delete pod -n graylog graylog-$i; done
+
+After a while (), graylog service will regenerate all 3 replicas with the correct configuration.
 
 
 Configuring Graylog
 ===================
-.. Main Title
 
 Adding the Inputs
 -----------------
