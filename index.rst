@@ -923,6 +923,14 @@ Servers
    "version": "3.1.4"
    }
 
+LDAP Authentication   
+-------------------
+
+In order for enroll succesfully the LDAP authentication in Graylog, you must go to System -> Authentication, and enable LDAP. This requires having a
+user created in your IPA server, and also a couple of groups, like graylog-users and graylog-admin. For more details (at least for LSST) you can find
+specific details in https://confluence.lsstcorp.org/display/IT/Graylog
+
+
 Dashboards
 ----------
 
