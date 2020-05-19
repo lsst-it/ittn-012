@@ -904,9 +904,9 @@ Servers
     |   2    |  Sudo User          | Set as field the user doing sudo              | Split&Index  |     source    | sudo_user   | index=2 & split=" :"                    |
     +--------+---------------------+-----------------------------------------------+--------------+---------------+-------------+-----------------------------------------+
 .. code-block:: json
-
-    {
-    "extractors": [
+    
+   {
+   "extractors": [
     {
       "title": "FQDN to IP resolve",
       "extractor_type": "lookup_table",
@@ -935,11 +935,41 @@ Servers
       },
       "condition_type": "none",
       "condition_value": ""
+    },
+    {
+      "title": "Server Username",
+      "extractor_type": "split_and_index",
+      "converters": [],
+      "order": 0,
+      "cursor_strategy": "copy",
+      "source_field": "message",
+      "target_field": "server_username",
+      "extractor_config": {
+        "index": 2,
+        "split_by": "user "
+      },
+      "condition_type": "none",
+      "condition_value": ""
+    },
+    {
+      "title": "Remove the end dot",
+      "extractor_type": "split_and_index",
+      "converters": [],
+      "order": 0,
+      "cursor_strategy": "copy",
+      "source_field": "server_username",
+      "target_field": "server_username",
+      "extractor_config": {
+        "index": 1,
+        "split_by": "."
+      },
+      "condition_type": "none",
+      "condition_value": ""
     }
    ],
    "version": "3.1.4"
    }
-   }
+
 
 LDAP Authentication   
 -------------------
@@ -952,10 +982,8 @@ specific details in https://confluence.lsstcorp.org/display/IT/Graylog
 Dashboards
 ----------
 
-Centralized Logging System
-^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-
+Servers
+^^^^^^^
 
 .. _table-ServersDashboard:
 
@@ -979,6 +1007,9 @@ Centralized Logging System
     |   7    |  Top Servers Talkers                      | collector:servers                                                                                                                                                                                                                           | Histogram                        | source/none            |
     +--------+-------------------------------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+----------------------------------+------------------------+
     
+
+Nwtwork
+^^^^^^^
 
 .. _table-NetworkDashboard:
 
@@ -1006,6 +1037,9 @@ Centralized Logging System
     |   7    |  Top NetDev Talkers                       | collector:network                                   | Histogram                        | source/none            |
     +--------+-------------------------------------------+-----------------------------------------------------+----------------------------------+------------------------+
     
+
+Location
+^^^^^^^^
 
 .. _table-LocationDashboard:
 
