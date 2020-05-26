@@ -4,12 +4,9 @@
 
 .. note::
 
-   **This technote is not yet published.**
-
-   Graylog over RKE
-
+   **This technote was written and design to be used along with LSST Syslog Systems **
+   
 .. sectnum::
-
 
 Introduction
 ============
@@ -17,6 +14,7 @@ Introduction
 Hierarchical construction, deployment and configuration of a Graylog chart over RKE. All authentication
 instructions and users/passwords creations will be done omitting any sensitive information; so they are 
 just random information (not usable)
+
 
 Requirements
 ============
@@ -45,8 +43,10 @@ warnings of insecure connection or self-signed certificates.
 There are also some plugins that will helm your daily needs, that needs to be set up through the values
 you pass onto graylog helm deployment.
 
+
 AWS Credencials
 ---------------
+
 
 IAM Policy
 ^^^^^^^^^^
@@ -81,6 +81,7 @@ content:
     ]
     }
 
+
 AWS User
 ^^^^^^^^
 
@@ -99,6 +100,7 @@ in this case, cert-manager.
 
 Cert-Manager Installation with letsencrypt as ClusterIssuer
 -----------------------------------------------------------
+
 
 Secret Resource
 ^^^^^^^^^^^^^^^
@@ -134,6 +136,7 @@ Next, we are going to install the helm repo for cert-mnagaer and update the syst
 
 The first command installs the repo, the second one updates the CRD entries and the third one installs cert-manager
 in the cert-manager namespace.
+
 
 Letsencrypt ClusterIssuer
 ^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -177,8 +180,10 @@ Now create the Cluster Issuer:
    kubectl apply -f letsencrypt.yaml
 
 
+
 Graylog Deployment
 ------------------
+
 
 GeoIP Plugin
 ^^^^^^^^^^^^
@@ -209,6 +214,7 @@ Since graylog will have a user restriction, we recomment setting a copy of the d
 .. code-block:: bash
    
    35 10 * * 3 /bin/geoipupdate; /bin/cp /usr/share/GeoIP/GeoLite2-City.mmdb /var/tmp/GeoLite.mmdb
+
 
 
 Graylog Helm Chart with values.yaml
@@ -299,8 +305,10 @@ Once done, you can pattiently wait for the pods to reissue themselfs or you can 
 After a while (), graylog service will regenerate all 3 replicas with the correct configuration.
 
 
+
 Configuring Graylog
 ===================
+
 
 Adding the Inputs
 -----------------
@@ -976,8 +984,43 @@ LDAP Authentication
 
 In order for enroll succesfully the LDAP authentication in Graylog, you must go to System -> Authentication, and enable LDAP. This requires having a
 user created in your IPA server, and also a couple of groups, like graylog-users and graylog-admin. For more details (at least for LSST) you can find
-specific details in https://confluence.lsstcorp.org/display/IT/Graylog
+specific details in https://confluence.lsstcorp.org/display/IT/Graylog.
 
+In order to add additional groups, make sure tu add the prefix "graylog-" in IPA - i.e. for ComCam Users, graylog-comcam.
+
+Roles
+^^^^^
+
+Roles allow you to add specific users or groups with a specific capability. In this case, so we can allow graylog-comcam users only to be able to see their own
+dashboard, head to System -> Authentication -> LDAP.
+
+Then, on the left panel click on Roles. Assign a name and a description, and then select the restrictions you would like this group be constrain to:
+
+.. code-block:: bash
+
+   Name:         ComCam
+   Description:  Assign to ComCam users.
+   Permissiones:
+    Dashboards:  Base ComCam (Allow Reading)
+
+Once the role is created, make sure to head to "LDAP/Active Directory" at the left pannel, then "LDAP Group Mapping", and assign the newly created role, to 
+the destined user group:
+
+
+.. _table-LDAPGroups:
+
+.. table:: LDAP Groups Scheme.
+
+    +--------+-------------------+-------------+
+    | Number |    Group Name     |     Role    |
+    +========+===================+=============+
+    |   1    |     graylog       |    Reader   |
+    +--------+-------------------+-------------+
+    |   2    |  graylog-admins   |    Admin    |
+    +--------+-------------------+-------------+
+    |   3    |  graylog-comcam   |    ComCam   |
+    +--------+-------------------+-------------+
+  
 
 Dashboards
 ----------
@@ -1008,7 +1051,7 @@ Servers
     +--------+-------------------------------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+----------------------------------+------------------------+
     
 
-Nwtwork
+Network
 ^^^^^^^
 
 .. _table-NetworkDashboard:
@@ -1048,7 +1091,6 @@ Location
     +--------+-------------------------------------------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+----------------------------------+------------------------+
     | Number |                Name                       |                                         Search Query                                                                                                                           |                Type              | Field/Stacked Fields   |
     +========+===========================================+================================================================================================================================================================================+==================================+========================+
-    +--------+-------------------------------------------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+----------------------------------+------------------------+
     |   1    |  Authorized VPN Users Location            | collector:firewall AND source:snort                                                                                                                                            | GeoMap                           | src_location/none      |
     +--------+-------------------------------------------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+----------------------------------+------------------------+
     |   2    |  Potencial Attacks through IP Geolocation | collector:firewall AND source:openv                                                                                                                                            | GeoMap                           | src_location/none      |
@@ -1056,6 +1098,23 @@ Location
     |   3    |  VPN Location - Username - IP             | collector:firewall AND source:openv                                                                                                                                            | Quick Value with Table           | source/username, vpnIP | 
     +--------+-------------------------------------------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+----------------------------------+------------------------+
     
+
+Base ComCam
+^^^^^^^^^^^
+
+.. _table-ComCamDashboard:
+
+.. table:: Base ComCam Dashboard.
+
+    +--------+-----------------------+--------------------------------------+----------------------------------+------------------------+
+    | Number |          Name         |              Search Query            |                Type              | Field/Stacked Fields   |
+    +========+=======================+======================================+==================================+========================+
+    |   1    |  Top Loggers          | collector:servers AND source:comcam* | Quick Value with Pie Chart/Table | source/none            |
+    +--------+-----------------------+--------------------------------------+----------------------------------+------------------------+
+    |   2    |  ComCam Base Servers  | collector:servers AND source:comcam* | Histogram                        | source/none            |
+    +--------+-----------------------+--------------------------------------+----------------------------------+------------------------+
+    
+
 
 Common Issues and Solutions
 ===========================
@@ -1086,5 +1145,3 @@ Since GeoLite is done through an API, there is no persistent storage for it in t
 
       for i in {0,1,2}; do kubectl cp ~/GeoLite2-City_20200414/GeoLite2-City.mmdb graylog/graylog-$i:/usr/share/graylog/GeoLite2-City.mmdb; done
 
-
-:tocdepth: 1
