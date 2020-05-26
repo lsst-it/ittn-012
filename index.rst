@@ -5,11 +5,8 @@
 .. note::
 
    **This technote was written and design to be used along with LSST Syslog Systems **
-
-   Graylog over RKE
-
+   
 .. sectnum::
-
 
 Introduction
 ============
@@ -1148,5 +1145,3 @@ Since GeoLite is done through an API, there is no persistent storage for it in t
 
       for i in {0,1,2}; do kubectl cp ~/GeoLite2-City_20200414/GeoLite2-City.mmdb graylog/graylog-$i:/usr/share/graylog/GeoLite2-City.mmdb; done
 
-
-:tocdepth: 1
