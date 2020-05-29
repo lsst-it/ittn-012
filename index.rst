@@ -4,7 +4,7 @@
 
 .. note::
 
-   **This technote was written and design to be used along with LSST Syslog Systems **
+   **This technote was written and design to be used along with Rubin Obs. Syslog Systems **
    
 .. sectnum::
 
@@ -20,7 +20,7 @@ Requirements
 ============
 
 The cluster in which you are going to deploy the Graylog instance, has to be already
-configured with an orchestrator, persistent volume manager, ingress controller and
+configured with an orchestrator, persistent volume manager, ingress controller, and a
 load balancer. In this particular deployment, we are using:
 
 - RKE v1.0.4
@@ -36,7 +36,7 @@ Charts and Plugins deployment
 =============================
 
 A Certificate Manager allows you to use self-generated certificates (intended for secure connection)
-and through a Issuer or ClusterIssuer (the first one requires one per namespace) authenticates the 
+and through an Issuer or ClusterIssuer (the first one requires one certificate per namespace) authenticates the 
 certificate against a letsencrypt server. This will result in a completely secured website with no 
 warnings of insecure connection or self-signed certificates.
 
@@ -174,7 +174,7 @@ Finally, we now need to create the yaml file for the ClusterIssuer:
 Keep in mind that the secretAccessKeySecretRef uses the name of the secret we already created, and key takes the specific
 value we added in within it.
 
-Now create the Cluster Issuer:
+Now create the Cluster Issuer.
 
 .. code-block:: bash
    kubectl apply -f letsencrypt.yaml
@@ -188,8 +188,8 @@ Graylog Deployment
 GeoIP Plugin
 ^^^^^^^^^^^^
 
-GeoLocation is a very useful plugin, that allows you to geolocate IPs (with specific coordinates) so you can then plot them 
-into a map. The way it use to work, is thta it was "common access" for everyone, and you just needed to point the url to the
+GeoLocation is a very useful plugin, that allows you to geolocate IPs (with specific coordinates) so you can plot them 
+into a map. It is "common access" for everyone, and you just needed to point the url to the
 precise location; but since the last update, you must follow the instructions from:
 
 https://blog.maxmind.com/2019/12/18/significant-changes-to-accessing-and-using-geolite2-databases/
@@ -314,7 +314,7 @@ Adding the Inputs
 -----------------
 
 1. 
-LSST Firewall Syslogs
+Rubin Obs. Firewall Syslogs
 
 - allow_override_data: true
 - bind_address: 0.0.0.0
@@ -332,7 +332,7 @@ Add it, and then "More actions -> Add Static Field":
 - Field Value: firewall
 
 2. 
-LSST Network Syslogs
+Rubin Obs. Network Syslogs
 
 - allow_override_data: true
 - bind_address: 0.0.0.0
@@ -351,7 +351,7 @@ Add it, and then "More actions -> Add Static Field":
 
 
 3. 
-LSST Servers Syslogs
+Rubin Obs. Servers Syslogs
 
 - allow_override_data: true
 - bind_address: 0.0.0.0
@@ -372,7 +372,7 @@ Add it, and then "More actions -> Add Static Field":
 LookUP Tables
 -------------
 
-For Graylog to be able of doing some processing with the incoming logs, you need to create LookUP Tables. This allows you to use any of the incomming inputs and process them 
+For Graylog to be able of doing some processing with the incoming logs, you need to create LookUP Tables. This allows you to use any of the incoming inputs and process them 
 into something you need. 
 
 .. _table-LookUPTable:
@@ -391,8 +391,8 @@ into something you need.
 Data Adapters
 ^^^^^^^^^^^^^
 
-This are the escense of the Tables. There are many types (such us CSV Files, Whois for IPs, Ransomware blocklist, among others). The Adapters take the input, i.e. source (which
-fot the matters of this example will be an FQDN), and process is according to the engine you select; so, if you selected "DNS Lookup", it will resolve the FQDN into an IP, or if
+These are the essense of the Tables. There are many types (such us CSV Files, Whois for IPs, Ransomware blocklist, among others). The Adapters take the input, i.e. source (which
+for this example will be an FQDN), and process is according to the engine you select; so, if you selected "DNS Lookup", it will resolve the FQDN into an IP, or if
 you select "Randomware blocklist" it will look into an external database and check if the IP is listed there.
 
 .. _table-DataAdapters:
@@ -411,7 +411,7 @@ you select "Randomware blocklist" it will look into an external database and che
 Caches
 ^^^^^^
 
-Determines if you wanna store the processed data from the Data Adapters, where (volatile or storage) and for how long.
+Determines if you want to store the processed data from the Data Adapters, where (volatile or storage) and for how long.
 
 .. _table-Caches:
 
@@ -431,8 +431,8 @@ Extractors
 ----------
 
 Let's say that the source name isn't right (or is not the one you wanted), but the correct one is in between the message field, or that you would like to have a field with the 
-username of the user that is running the command and you see that the username is contained in another field. There's were Extractors come in handy: they allow you to extrac a
-determine pattern from all logs arrived and turn it into a new field. Extractors also allow you to run the extracted content through a LookUP table, meaning you can process 
+username of the user that is running the command and you see that the username is contained in another field. That's were Extractors come in handy: they allow you to extract an specific
+pattern from all logs arrived and turn it into a new field. Extractors also allows you to run the extracted content through a LookUP table, meaning you can process 
 and manage the content (like looking an FQDN through a DNS resolver).
 
 Firewall
@@ -983,7 +983,7 @@ LDAP Authentication
 -------------------
 
 In order for enroll succesfully the LDAP authentication in Graylog, you must go to System -> Authentication, and enable LDAP. This requires having a
-user created in your IPA server, and also a couple of groups, like graylog-users and graylog-admin. For more details (at least for LSST) you can find
+user created in your IPA server, and also a couple of groups, like graylog-users and graylog-admin. For more details (at least for Rubin Obs.) you can find
 specific details in https://confluence.lsstcorp.org/display/IT/Graylog.
 
 In order to add additional groups, make sure tu add the prefix "graylog-" in IPA - i.e. for ComCam Users, graylog-comcam.
@@ -991,10 +991,10 @@ In order to add additional groups, make sure tu add the prefix "graylog-" in IPA
 Roles
 ^^^^^
 
-Roles allow you to add specific users or groups with a specific capability. In this case, so we can allow graylog-comcam users only to be able to see their own
+Roles allows you to add specific users or groups with a specific capability. In this case, so we can allow graylog-comcam users only to be able to see their own
 dashboard, head to System -> Authentication -> LDAP.
 
-Then, on the left panel click on Roles. Assign a name and a description, and then select the restrictions you would like this group be constrain to:
+Then, on the left panel click on Roles, assign a name and a description, and then select the restrictions you would like to apply to this group:
 
 .. code-block:: bash
 
@@ -1003,8 +1003,8 @@ Then, on the left panel click on Roles. Assign a name and a description, and the
    Permissiones:
     Dashboards:  Base ComCam (Allow Reading)
 
-Once the role is created, make sure to head to "LDAP/Active Directory" at the left pannel, then "LDAP Group Mapping", and assign the newly created role, to 
-the destined user group:
+Once the role is created, make sure to head to "LDAP/Active Directory" at the left pannel, then "LDAP Group Mapping", and assign the newly created role to 
+the desired group:
 
 
 .. _table-LDAPGroups:
@@ -1122,8 +1122,8 @@ Common Issues and Solutions
 Fail index
 ----------
 
-Due to many reasons, one of them you ran out of space in the data pod, index might crush, preventing graylog to right more indices into it. The most common way of noticing it, is because
-graylog will find nothing through the search query. To solve it, you can dump the fail indexes through a curl:
+Due to many reasons, you may run out of space in the data pod and the index could crash, preventing graylog to write more indexes. The most common way of noticing it, is
+graylog not finding data through the search query. To solve it, dump the fail indexes through a curl:
 
 .. note::
 
