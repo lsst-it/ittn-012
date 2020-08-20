@@ -892,6 +892,36 @@ Network
       },
       "condition_type": "none",
       "condition_value": ""
+    },
+    {
+      "title": "User with bracket",
+      "extractor_type": "split_and_index",
+      "converters": [],
+      "order": 0,
+      "cursor_strategy": "copy",
+      "source_field": "message",
+      "target_field": "user_with_bracket",
+      "extractor_config": {
+        "index": 7,
+        "split_by": " "
+      },
+      "condition_type": "none",
+      "condition_value": ""
+    },
+    {
+      "title": "Network User",
+      "extractor_type": "split_and_index",
+      "converters": [],
+      "order": 0,
+      "cursor_strategy": "copy",
+      "source_field": "user_with_bracket",
+      "target_field": "net_dev_user",
+      "extractor_config": {
+        "index": 1,
+        "split_by": "]"
+      },
+      "condition_type": "none",
+      "condition_value": ""
     }
    ],
    "version": "3.1.4"
