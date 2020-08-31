@@ -849,20 +849,22 @@ Network
 
 .. table:: Network Extractors.
 
-    +--------+---------------------+-----------------------------------------------+--------------+------------------+-----------------+---------------------+
-    | Number |        Name         |                 Description                   |    Type      |    SourceField   |  DstField       |     Configurations  |
-    +========+=====================+===============================================+==============+==================+=================+=====================+
-    |   1    |  Extract Source     | Extract the hostname with the port            | Split&Index  |   message        | s_id            | index=1 & split=":" |
-    +--------+---------------------+-----------------------------------------------+--------------+------------------+-----------------+---------------------+
-    |   2    |  Hostname Extractor | Filter out the port, and replace source field | Split&Index  |   s_id           | source          | index=2 & split=":" |
-    +--------+---------------------+-----------------------------------------------+--------------+------------------+-----------------+---------------------+
-
+    +--------+---------------------+-----------------------------------------------+--------------+------------------+-----------------+--------------------------+
+    | Number |        Name         |                 Description                   |    Type      |    SourceField   |  DstField       |     Configurations       |
+    +========+=====================+===============================================+==============+==================+=================+==========================+
+    |   1    |  Extract Source     | Extract the hostname with the port            | Split&Index  |   message        | s_id            | index=1 & split=":"      |
+    +--------+---------------------+-----------------------------------------------+--------------+------------------+-----------------+--------------------------+
+    |   2    |  Hostname Extractor | Filter out the port, and replace source field | Split&Index  |   s_id           | source          | index=2 & split=":"      |
+    +--------+---------------------+-----------------------------------------------+--------------+------------------+-----------------+--------------------------+
+    |   3    |  Pre User Filter    | Fetch the user with some unwanted data        | Split&Index  |   message        | pre_userfilter  | index=2 & split="user: " |
+    +--------+---------------------+-----------------------------------------------+--------------+------------------+-----------------+--------------------------+
+    |   4    |  Network User       | Extract the user                              | Split&Index  | pre_userfilter   | network_user    | index=1 & split="]"      |
+    +--------+---------------------+-----------------------------------------------+--------------+------------------+-----------------+--------------------------+
 
 .. code-block:: json
 
-   Network Extractors JSON
-   {
-   "extractors": [
+{
+  "extractors": [
     {
       "title": "Extract Source",
       "extractor_type": "split_and_index",
@@ -894,16 +896,16 @@ Network
       "condition_value": ""
     },
     {
-      "title": "User with bracket",
+      "title": "Pre User Filter",
       "extractor_type": "split_and_index",
       "converters": [],
       "order": 0,
       "cursor_strategy": "copy",
       "source_field": "message",
-      "target_field": "user_with_bracket",
+      "target_field": "pre_userfilter",
       "extractor_config": {
-        "index": 7,
-        "split_by": " "
+        "index": 2,
+        "split_by": "user: "
       },
       "condition_type": "none",
       "condition_value": ""
@@ -914,8 +916,8 @@ Network
       "converters": [],
       "order": 0,
       "cursor_strategy": "copy",
-      "source_field": "user_with_bracket",
-      "target_field": "net_dev_user",
+      "source_field": "pre_userfilter",
+      "target_field": "network_user",
       "extractor_config": {
         "index": 1,
         "split_by": "]"
@@ -923,9 +925,9 @@ Network
       "condition_type": "none",
       "condition_value": ""
     }
-   ],
-   "version": "3.1.4"
-   }
+  ],
+  "version": "3.1.4"
+}
 
 Servers
 ^^^^^^^
